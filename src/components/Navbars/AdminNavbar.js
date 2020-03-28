@@ -79,12 +79,14 @@ class AdminNavbar extends React.Component {
       collapseOpen: !this.state.collapseOpen
     });
   };
+  
   // this function is to open the Search modal
   toggleModalSearch = () => {
     this.setState({
       modalSearch: !this.state.modalSearch
     });
   };
+
   render() {
     return (
       <>

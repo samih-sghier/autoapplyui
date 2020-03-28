@@ -15,157 +15,101 @@
 * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 
 */
-import React from "react";
+import React, { useEffect, useState } from "react";
+import axios from 'axios';
+import Popup from "reactjs-popup";
 
 // reactstrap components
 import {
+  Button,
   Card,
   CardHeader,
   CardBody,
   CardTitle,
   Table,
   Row,
-  Col
+  Col,
 } from "reactstrap";
+import Posts from "../data/Posts";
+import Filter from "../data/Filter";
+import Pagination from "../data/Pagination";
 
-class Tables extends React.Component {
-  render() {
-    return (
-      <>
-        <div className="content">
-          <Row>
-            <Col md="12">
-              <Card>
-                <CardHeader>
-                  <CardTitle tag="h4">Simple Table</CardTitle>
-                </CardHeader>
-                <CardBody>
-                  <Table className="tablesorter" responsive>
-                    <thead className="text-primary">
-                      <tr>
-                        <th>Name</th>
-                        <th>Country</th>
-                        <th>City</th>
-                        <th className="text-center">Salary</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr>
-                        <td>Dakota Rice</td>
-                        <td>Niger</td>
-                        <td>Oud-Turnhout</td>
-                        <td className="text-center">$36,738</td>
-                      </tr>
-                      <tr>
-                        <td>Minerva Hooper</td>
-                        <td>Curaçao</td>
-                        <td>Sinaai-Waas</td>
-                        <td className="text-center">$23,789</td>
-                      </tr>
-                      <tr>
-                        <td>Sage Rodriguez</td>
-                        <td>Netherlands</td>
-                        <td>Baileux</td>
-                        <td className="text-center">$56,142</td>
-                      </tr>
-                      <tr>
-                        <td>Philip Chaney</td>
-                        <td>Korea, South</td>
-                        <td>Overland Park</td>
-                        <td className="text-center">$38,735</td>
-                      </tr>
-                      <tr>
-                        <td>Doris Greene</td>
-                        <td>Malawi</td>
-                        <td>Feldkirchen in Kärnten</td>
-                        <td className="text-center">$63,542</td>
-                      </tr>
-                      <tr>
-                        <td>Mason Porter</td>
-                        <td>Chile</td>
-                        <td>Gloucester</td>
-                        <td className="text-center">$78,615</td>
-                      </tr>
-                      <tr>
-                        <td>Jon Porter</td>
-                        <td>Portugal</td>
-                        <td>Gloucester</td>
-                        <td className="text-center">$98,615</td>
-                      </tr>
-                    </tbody>
-                  </Table>
-                </CardBody>
-              </Card>
-            </Col>
-            <Col md="12">
-              <Card className="card-plain">
-                <CardHeader>
-                  <CardTitle tag="h4">Table on Plain Background</CardTitle>
-                  <p className="category">Here is a subtitle for this table</p>
-                </CardHeader>
-                <CardBody>
-                  <Table className="tablesorter" responsive>
-                    <thead className="text-primary">
-                      <tr>
-                        <th>Name</th>
-                        <th>Country</th>
-                        <th>City</th>
-                        <th className="text-center">Salary</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr>
-                        <td>Dakota Rice</td>
-                        <td>Niger</td>
-                        <td>Oud-Turnhout</td>
-                        <td className="text-center">$36,738</td>
-                      </tr>
-                      <tr>
-                        <td>Minerva Hooper</td>
-                        <td>Curaçao</td>
-                        <td>Sinaai-Waas</td>
-                        <td className="text-center">$23,789</td>
-                      </tr>
-                      <tr>
-                        <td>Sage Rodriguez</td>
-                        <td>Netherlands</td>
-                        <td>Baileux</td>
-                        <td className="text-center">$56,142</td>
-                      </tr>
-                      <tr>
-                        <td>Philip Chaney</td>
-                        <td>Korea, South</td>
-                        <td>Overland Park</td>
-                        <td className="text-center">$38,735</td>
-                      </tr>
-                      <tr>
-                        <td>Doris Greene</td>
-                        <td>Malawi</td>
-                        <td>Feldkirchen in Kärnten</td>
-                        <td className="text-center">$63,542</td>
-                      </tr>
-                      <tr>
-                        <td>Mason Porter</td>
-                        <td>Chile</td>
-                        <td>Gloucester</td>
-                        <td className="text-center">$78,615</td>
-                      </tr>
-                      <tr>
-                        <td>Jon Porter</td>
-                        <td>Portugal</td>
-                        <td>Gloucester</td>
-                        <td className="text-center">$98,615</td>
-                      </tr>
-                    </tbody>
-                  </Table>
-                </CardBody>
-              </Card>
-            </Col>
-          </Row>
-        </div>
-      </>
-    );
+const Tables = () => {
+
+  const [showFilterPopUp, setShowFilterPopUp] = useState(false);
+  const [url, setUrl] = useState('http://127.0.0.1:8080/api/indexed/?endIndex=100&src=lever&startIndex=98');
+  const [loading, setLoading] = useState(true);
+  const [result, setResult] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [postsPerPage] = useState(10);
+  const [modalShow, setModalShow] = useState(false);
+
+
+  useEffect(() => {
+    const fetchPosts = async () => {
+      const response = await axios.get(url);
+      setResult(response.data);
+      setLoading(false);
+    };
+    fetchPosts();
+  }, [url, currentPage, showFilterPopUp]);
+
+  const reRender = () => {
+    setUrl('http://127.0.0.1:8080/api/indexed/?endIndex=1000&src=lever&startIndex=1');
+  };
+
+  // Get current posts
+  const indexOfLastPost = currentPage * postsPerPage;
+  const indexOfFirstPost = indexOfLastPost - postsPerPage;
+  const currentPosts = result.slice(indexOfFirstPost, indexOfLastPost);
+
+  // Change page
+  const paginate = (pageNumber) => {
+    setCurrentPage(pageNumber);
   }
+
+  // const togglePopup = () => {
+  //   setShowFilterPopUp(false);
+  // }
+
+  const showPopup = () => {
+    setShowFilterPopUp(true);
+  }
+
+  return (
+    <div className="content">
+      <Row>
+        <Col md="12">
+          <Card>
+            {!loading ?
+              <CardHeader>
+                {/* <Button className="btn btn-primary pull-left" color="danger">Submit</Button> */}
+                <Popup trigger={<button className="btn btn-primary pull-left" color="danger">Submit</button>
+                } position="right center">
+                  <span>
+                    <Filter></Filter>
+                  </span>
+                </Popup>
+                <Button className="pull-left" color="info" onClick={reRender}>Filter</Button>
+                <CardTitle className="text-success pull-right" tag="h4">{result.length} Available Positions</CardTitle>
+                {/* <p className="category">Here is a subtitle for this table</p> */}
+              </CardHeader> : null
+            }
+            <CardBody>
+              <Table className="tablesorter" responsive>
+                <Posts result={currentPosts} loading={loading} />
+              </Table>
+            </CardBody>
+            <Pagination
+              postsPerPage={postsPerPage}
+              totalPosts={result.length}
+              paginate={paginate}
+            />
+          </Card>
+        </Col>
+      </Row>
+    </div>
+  );
 }
 
 export default Tables;
