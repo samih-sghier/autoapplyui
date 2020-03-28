@@ -17,10 +17,10 @@
 */
 import React, { useEffect, useState } from "react";
 import axios from 'axios';
-import Popup from "reactjs-popup";
 
 // reactstrap components
 import {
+  Modal,
   Button,
   Card,
   CardHeader,
@@ -36,7 +36,6 @@ import Pagination from "../data/Pagination";
 
 const Tables = () => {
 
-  const [showFilterPopUp, setShowFilterPopUp] = useState(false);
   const [url, setUrl] = useState('http://127.0.0.1:8080/api/indexed/?endIndex=100&src=lever&startIndex=98');
   const [loading, setLoading] = useState(true);
   const [result, setResult] = useState([]);
@@ -52,7 +51,7 @@ const Tables = () => {
       setLoading(false);
     };
     fetchPosts();
-  }, [url, currentPage, showFilterPopUp]);
+  }, [url, currentPage]);
 
   const reRender = () => {
     setUrl('http://127.0.0.1:8080/api/indexed/?endIndex=1000&src=lever&startIndex=1');
@@ -72,8 +71,8 @@ const Tables = () => {
   //   setShowFilterPopUp(false);
   // }
 
-  const showPopup = () => {
-    setShowFilterPopUp(true);
+  const showModal = () => {
+    setModalShow(true);
   }
 
   return (
@@ -83,14 +82,15 @@ const Tables = () => {
           <Card>
             {!loading ?
               <CardHeader>
-                {/* <Button className="btn btn-primary pull-left" color="danger">Submit</Button> */}
-                <Popup trigger={<button className="btn btn-primary pull-left" color="danger">Submit</button>
-                } position="right center">
-                  <span>
-                    <Filter></Filter>
-                  </span>
-                </Popup>
-                <Button className="pull-left" color="info" onClick={reRender}>Filter</Button>
+                <Button className="btn btn-primary pull-left" color="danger" onClick={reRender}>Submit</Button>
+                <Modal
+                  class="modal-dialog"
+                  isOpen={modalShow}
+                >
+                  <Filter className="popup-content"></Filter>
+                </Modal>
+
+                <Button className="pull-left" color="info" onClick={showModal}>Filter</Button>
                 <CardTitle className="text-success pull-right" tag="h4">{result.length} Available Positions</CardTitle>
                 {/* <p className="category">Here is a subtitle for this table</p> */}
               </CardHeader> : null

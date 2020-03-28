@@ -19,12 +19,12 @@ import React from "react";
 
 // reactstrap components
 import {
+  Dropdown,
   Button,
   Card,
   CardHeader,
   CardBody,
   CardFooter,
-  CardText,
   FormGroup,
   Form,
   Input,
@@ -41,7 +41,7 @@ class Filter extends React.Component {
             <Col md="8">
               <Card>
                 <CardHeader>
-                  <h5 className="title">Edit Profile</h5>
+                  <h5 className="title">Filter</h5>
                 </CardHeader>
                 <CardBody>
                   <Form>
@@ -50,7 +50,7 @@ class Filter extends React.Component {
                         <FormGroup>
                           <label>Company (disabled)</label>
                           <Input
-                            defaultValue="Creative Code Inc."
+                            defaultValue="e.g: BowTie ..."
                             disabled
                             placeholder="Company"
                             type="text"
@@ -59,10 +59,10 @@ class Filter extends React.Component {
                       </Col>
                       <Col className="px-md-1" md="3">
                         <FormGroup>
-                          <label>Username</label>
+                          <label>Location</label>
                           <Input
                             defaultValue="michael23"
-                            placeholder="Username"
+                            placeholder="location"
                             type="text"
                           />
                         </FormGroup>
