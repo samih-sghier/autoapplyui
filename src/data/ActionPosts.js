@@ -1,7 +1,6 @@
 
 
-import React from 'react';
-import TableList from '../views/TableList';
+import React, { useEffect, useState } from "react";
 import axios from 'axios';
 
 

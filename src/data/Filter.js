@@ -15,10 +15,12 @@
 * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 
 */
-import React from "react";
+import React, { useEffect, useState } from "react";
+import TableList from "../views/TableList"
 
 // reactstrap components
 import {
+  Modal,
   Dropdown,
   Button,
   Card,
@@ -31,81 +33,45 @@ import {
   Row,
   Col
 } from "reactstrap";
+// onClick={() => setCount(count + 1)}
 
-class Filter extends React.Component {
-  render() {
+
+const Filter = ({ modalShow, setFilterCity, setFilterCommitment, setFilterCompany, setFilterTitle, setFilterCountry, setFilterDescription, handleSubmit}) => {
+
     return (
       <>
+      <Modal
+      class="modal-dialog"
+      isOpen={modalShow}
+      >
         <div className="content">
           <Row>
             <Col md="8">
               <Card>
                 <CardHeader>
-                  <h5 className="title">Filter</h5>
+                  <h5 className="title">Filter Positions</h5>
                 </CardHeader>
                 <CardBody>
                   <Form>
                     <Row>
                       <Col className="pr-md-1" md="5">
                         <FormGroup>
-                          <label>Company (disabled)</label>
+                          <label>Company</label>
                           <Input
-                            defaultValue="e.g: BowTie ..."
-                            disabled
+                            // disabled
                             placeholder="Company"
                             type="text"
+                            onChange={e => setFilterCompany(e.target.value)}
                           />
                         </FormGroup>
                       </Col>
                       <Col className="px-md-1" md="3">
                         <FormGroup>
-                          <label>Location</label>
+                          <label>Title</label>
                           <Input
-                            defaultValue="michael23"
-                            placeholder="location"
+                            placeholder="title"
                             type="text"
-                          />
-                        </FormGroup>
-                      </Col>
-                      <Col className="pl-md-1" md="4">
-                        <FormGroup>
-                          <label htmlFor="exampleInputEmail1">
-                            Email address
-                          </label>
-                          <Input placeholder="mike@email.com" type="email" />
-                        </FormGroup>
-                      </Col>
-                    </Row>
-                    <Row>
-                      <Col className="pr-md-1" md="6">
-                        <FormGroup>
-                          <label>First Name</label>
-                          <Input
-                            defaultValue="Mike"
-                            placeholder="Company"
-                            type="text"
-                          />
-                        </FormGroup>
-                      </Col>
-                      <Col className="pl-md-1" md="6">
-                        <FormGroup>
-                          <label>Last Name</label>
-                          <Input
-                            defaultValue="Andrew"
-                            placeholder="Last Name"
-                            type="text"
-                          />
-                        </FormGroup>
-                      </Col>
-                    </Row>
-                    <Row>
-                      <Col md="12">
-                        <FormGroup>
-                          <label>Address</label>
-                          <Input
-                            defaultValue="Bld Mihail Kogalniceanu, nr. 8 Bl 1, Sc 1, Ap 09"
-                            placeholder="Home Address"
-                            type="text"
+                            onChange={e => setFilterTitle(e.target.value)}
                           />
                         </FormGroup>
                       </Col>
@@ -115,9 +81,9 @@ class Filter extends React.Component {
                         <FormGroup>
                           <label>City</label>
                           <Input
-                            defaultValue="Mike"
                             placeholder="City"
                             type="text"
+                            onChange={e => setFilterCity(e.target.value)}
                           />
                         </FormGroup>
                       </Col>
@@ -125,30 +91,29 @@ class Filter extends React.Component {
                         <FormGroup>
                           <label>Country</label>
                           <Input
-                            defaultValue="Andrew"
                             placeholder="Country"
                             type="text"
+                            onChange={e => setFilterCountry(e.target.value)}
                           />
                         </FormGroup>
                       </Col>
                       <Col className="pl-md-1" md="4">
                         <FormGroup>
-                          <label>Postal Code</label>
-                          <Input placeholder="ZIP Code" type="number" />
+                          <label>Commitment</label>
+                          <Input placeholder="Full-Time" type="text"  onChange={e => setFilterCommitment(e.target.value)}/>
                         </FormGroup>
                       </Col>
                     </Row>
                     <Row>
                       <Col md="8">
                         <FormGroup>
-                          <label>About Me</label>
+                          <label>Job Description Key Words</label>
                           <Input
                             cols="80"
-                            defaultValue="Lamborghini Mercy, Your chick she so thirsty, I'm in
-                            that two seat Lambo."
                             placeholder="Here can be your description"
                             rows="4"
                             type="textarea"
+                            onChange={e => setFilterDescription(e.target.value)}
                           />
                         </FormGroup>
                       </Col>
@@ -156,7 +121,7 @@ class Filter extends React.Component {
                   </Form>
                 </CardBody>
                 <CardFooter>
-                  <Button className="btn-fill" color="primary" type="submit">
+                  <Button className="btn-fill" color="primary" type="submit" onClick={handleSubmit}>
                     Save
                   </Button>
                 </CardFooter>
@@ -164,9 +129,9 @@ class Filter extends React.Component {
             </Col>
           </Row>
         </div>
+        </Modal>
       </>
     );
   }
-}
 
 export default Filter;

@@ -42,6 +42,13 @@ const Tables = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [postsPerPage] = useState(10);
   const [modalShow, setModalShow] = useState(false);
+  const [city, setCity] = useState("");
+  const [country, setCountry] = useState("");
+  const [company, setCompany] = useState("");
+  const [title, setTitle] = useState("");
+  const [commitment, setCommitment] = useState("");
+  const [description, setDescription] = useState("");
+
 
 
   useEffect(() => {
@@ -67,9 +74,38 @@ const Tables = () => {
     setCurrentPage(pageNumber);
   }
 
-  // const togglePopup = () => {
-  //   setShowFilterPopUp(false);
-  // }
+  const setFilterCity = (theCity) => {
+    setCity(theCity);
+  }
+
+  const setFilterTitle = (theTitle) => {
+    setTitle(theTitle);
+  }
+
+  const setFilterCommitment = (theCommitment) => {
+    setCommitment(theCommitment);
+  }
+
+  const setFilterCompany = (theCompany) => {
+    setCompany(theCompany);
+  }
+
+  const setFilterCountry = (theCountry) => {
+    setCountry(theCountry);
+  }
+  
+  const setFilterDescription = (theDescription) => {
+    setDescription(theDescription);
+  }
+
+  const handleSubmit = () => {
+    console.log("the city " + city);
+    console.log("the company " + company);
+    console.log("the country " + country);
+    console.log("the commitment" + commitment);
+    console.log("the title " + title);
+    console.log("the description " + description);
+  }
 
   const showModal = () => {
     setModalShow(true);
@@ -83,13 +119,17 @@ const Tables = () => {
             {!loading ?
               <CardHeader>
                 <Button className="btn btn-primary pull-left" color="danger" onClick={reRender}>Submit</Button>
-                <Modal
-                  class="modal-dialog"
-                  isOpen={modalShow}
-                >
-                  <Filter className="popup-content"></Filter>
-                </Modal>
-
+                <Filter 
+                className="popup-content" 
+                modalShow={modalShow} 
+                setFilterCity = {setFilterCity}
+                setFilterTitle = {setFilterTitle}
+                setFilterCommitment = {setFilterCommitment}
+                setFilterCompany = {setFilterCompany}
+                setFilterCountry = {setFilterCountry}
+                setFilterDescription = {setFilterDescription}
+                handleSubmit = {handleSubmit}
+                ></Filter>
                 <Button className="pull-left" color="info" onClick={showModal}>Filter</Button>
                 <CardTitle className="text-success pull-right" tag="h4">{result.length} Available Positions</CardTitle>
                 {/* <p className="category">Here is a subtitle for this table</p> */}
