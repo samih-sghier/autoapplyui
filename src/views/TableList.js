@@ -49,9 +49,6 @@ const Tables = () => {
   const [description, setDescription] = useState("");
   const [resetCart, setResetCart] = useState(false);
 
-
-
-
   useEffect(() => {
     const fetchPosts = async () => {
       const response = await axios.get(url);
@@ -140,7 +137,6 @@ const Tables = () => {
                 ></Filter>
                 <Button className="pull-left" color="info" onClick={showModal}>Filter</Button>
                 <CardTitle className="text-success pull-right" tag="h4">{result.length} Available Positions</CardTitle>
-                {/* <p className="category">Here is a subtitle for this table</p> */}
               </CardHeader> : null
             }
             <CardBody>

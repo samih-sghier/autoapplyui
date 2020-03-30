@@ -10,15 +10,18 @@ import {
     CardTitle,
 } from "reactstrap";
 
+let positionsToApply = [];
 
 const Posts = ({ result, loading, resetCart, setResetCart }) => {
-    let positionsToApply = [];
     if (resetCart) {
         while (positionsToApply.length > 0) {
             positionsToApply.pop();
         }
-        console.log("empty " + positionsToApply);
+        result.map(val => {
+            val.isChecked = false;
+          });       
         setResetCart(false);
+        console.log("empty " + positionsToApply);
     }
     if (loading) {
         return (
