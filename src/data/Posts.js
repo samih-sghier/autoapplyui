@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 import uuid from 'uuid/v1';
 
 
@@ -10,7 +10,16 @@ import {
     CardTitle,
 } from "reactstrap";
 
-const Posts = ({ result, loading }) => {
+
+const Posts = ({ result, loading, resetCart, setResetCart }) => {
+    let positionsToApply = [];
+    if (resetCart) {
+        while (positionsToApply.length > 0) {
+            positionsToApply.pop();
+        }
+        console.log("empty " + positionsToApply);
+        setResetCart(false);
+    }
     if (loading) {
         return (
             <tbody>
@@ -24,7 +33,18 @@ const Posts = ({ result, loading }) => {
             </tbody>
         )
     }
-    
+
+    const handleCheckMark = (post) => {
+        if (!post.isChecked) {
+            post.isChecked = true;
+            positionsToApply.push(post);
+        } else if (post.isChecked) {
+            post.isChecked = false;
+            positionsToApply.pop(post)
+        }
+        console.log(positionsToApply);
+    };
+
     return (
         <>
             <thead className="text-primary">
@@ -43,7 +63,9 @@ const Posts = ({ result, loading }) => {
                         <td>
                             <FormGroup check>
                                 <Label check>
-                                    <Input defaultValue="" type="checkbox" />
+                                    <Input type="checkbox"
+                                        onChange={(event) => handleCheckMark(post)}
+                                    />
                                     <span className="form-check-sign">
                                         <span className="check" />
                                     </span>
@@ -62,5 +84,6 @@ const Posts = ({ result, loading }) => {
         </>
     );
 };
+
 
 export default Posts;

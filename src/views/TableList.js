@@ -20,7 +20,6 @@ import axios from 'axios';
 
 // reactstrap components
 import {
-  Modal,
   Button,
   Card,
   CardHeader,
@@ -48,12 +47,17 @@ const Tables = () => {
   const [title, setTitle] = useState("");
   const [commitment, setCommitment] = useState("");
   const [description, setDescription] = useState("");
+  const [resetCart, setResetCart] = useState(false);
+
 
 
 
   useEffect(() => {
     const fetchPosts = async () => {
       const response = await axios.get(url);
+      response.data.map(val => {
+        val.isChecked = false;
+      });
       setResult(response.data);
       setLoading(false);
     };
@@ -98,13 +102,17 @@ const Tables = () => {
     setDescription(theDescription);
   }
 
-  const handleSubmit = () => {
-    console.log("the city " + city);
-    console.log("the company " + company);
-    console.log("the country " + country);
-    console.log("the commitment" + commitment);
-    console.log("the title " + title);
-    console.log("the description " + description);
+  const handleSubmitFilter = () => {
+    setUrl(`http://127.0.0.1:8080/api/bigfilter/?city=${city}&comm=${commitment}&comp=${company}&country=${country}&desc=${description}&job=${title}&src=lever`);
+    //reset data
+    setCity("");
+    setCommitment("");
+    setCompany("");
+    setDescription("");
+    setTitle("");
+    setCountry("");
+    setModalShow(false);
+    setResetCart(true);
   }
 
   const showModal = () => {
@@ -128,7 +136,7 @@ const Tables = () => {
                 setFilterCompany = {setFilterCompany}
                 setFilterCountry = {setFilterCountry}
                 setFilterDescription = {setFilterDescription}
-                handleSubmit = {handleSubmit}
+                handleSubmit = {handleSubmitFilter}
                 ></Filter>
                 <Button className="pull-left" color="info" onClick={showModal}>Filter</Button>
                 <CardTitle className="text-success pull-right" tag="h4">{result.length} Available Positions</CardTitle>
@@ -137,7 +145,7 @@ const Tables = () => {
             }
             <CardBody>
               <Table className="tablesorter" responsive>
-                <Posts result={currentPosts} loading={loading} />
+                <Posts result={currentPosts} loading={loading} resetCart = {resetCart} setResetCart = {setResetCart} />
               </Table>
             </CardBody>
             <Pagination

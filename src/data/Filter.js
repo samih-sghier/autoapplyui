@@ -41,7 +41,6 @@ const Filter = ({ modalShow, setFilterCity, setFilterCommitment, setFilterCompan
     return (
       <>
       <Modal
-      class="modal-dialog"
       isOpen={modalShow}
       >
         <div className="content">
