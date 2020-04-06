@@ -15,7 +15,7 @@
 * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 
 */
-import React from "react";
+import React, { useEffect, useState } from "react";
 
 // reactstrap components
 import {
@@ -33,6 +33,21 @@ import {
 } from "reactstrap";
 
 class UserProfile extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      uploadedFileName: "No File Found",
+      file: []
+    };
+  }
+
+  handleUploadFile = (event) => {
+    this.setState({
+      file: event.target.files[0],
+      uploadedFileName: event.target.files[0].name
+    });
+  };
+
   render() {
     return (
       <>
@@ -47,21 +62,22 @@ class UserProfile extends React.Component {
                   <Form>
                     <Row>
                       <Col className="pr-md-1" md="5">
+                        <label>Upload Resume</label>
                         <FormGroup>
-                          <label>Company (disabled)</label>
+                          <i className="tim-icons icon-cloud-upload-94" type="file" />
                           <Input
-                            defaultValue="Creative Code Inc."
-                            disabled
-                            placeholder="Company"
-                            type="text"
+                            type="file"
+                            onChange={this.handleUploadFile}
                           />
+                          <span><a style={{ marginLeft: '.5rem' }} ></a></span>
+                          <label>{this.state.uploadedFileName}</label>
                         </FormGroup>
                       </Col>
                       <Col className="px-md-1" md="3">
                         <FormGroup>
                           <label>Username</label>
                           <Input
-                            defaultValue="michael23"
+                            defaultValue=""
                             placeholder="Username"
                             type="text"
                           />
@@ -72,7 +88,7 @@ class UserProfile extends React.Component {
                           <label htmlFor="exampleInputEmail1">
                             Email address
                           </label>
-                          <Input placeholder="mike@email.com" type="email" />
+                          <Input placeholder="Email" type="email" />
                         </FormGroup>
                       </Col>
                     </Row>
@@ -81,7 +97,7 @@ class UserProfile extends React.Component {
                         <FormGroup>
                           <label>First Name</label>
                           <Input
-                            defaultValue="Mike"
+                            defaultValue=""
                             placeholder="Company"
                             type="text"
                           />
@@ -91,7 +107,7 @@ class UserProfile extends React.Component {
                         <FormGroup>
                           <label>Last Name</label>
                           <Input
-                            defaultValue="Andrew"
+                            defaultValue=""
                             placeholder="Last Name"
                             type="text"
                           />
@@ -103,7 +119,7 @@ class UserProfile extends React.Component {
                         <FormGroup>
                           <label>Address</label>
                           <Input
-                            defaultValue="Bld Mihail Kogalniceanu, nr. 8 Bl 1, Sc 1, Ap 09"
+                            defaultValue=""
                             placeholder="Home Address"
                             type="text"
                           />
@@ -115,7 +131,7 @@ class UserProfile extends React.Component {
                         <FormGroup>
                           <label>City</label>
                           <Input
-                            defaultValue="Mike"
+                            defaultValue=""
                             placeholder="City"
                             type="text"
                           />
@@ -125,7 +141,7 @@ class UserProfile extends React.Component {
                         <FormGroup>
                           <label>Country</label>
                           <Input
-                            defaultValue="Andrew"
+                            defaultValue=""
                             placeholder="Country"
                             type="text"
                           />
@@ -139,14 +155,28 @@ class UserProfile extends React.Component {
                       </Col>
                     </Row>
                     <Row>
-                      <Col md="8">
+                      <Col className="pr-md-1" md="4">
                         <FormGroup>
-                          <label>About Me</label>
+                          <label>Job Title</label>
+                          <Input
+                            placeholder="Last position held"
+                            type="text"
+                          />
+                        </FormGroup>
+                      </Col>
+                      <Col className="px-md-1" md="4">
+                        <FormGroup>
+                          <label>Company</label>
+                          <Input placeholder="Company" type="text" />
+                        </FormGroup>
+                      </Col>
+                      <Col className="pl-md-1" md="4">
+                        <FormGroup>
+                          <label>Job description</label>
                           <Input
                             cols="80"
-                            defaultValue="Lamborghini Mercy, Your chick she so thirsty, I'm in
-                            that two seat Lambo."
-                            placeholder="Here can be your description"
+                            defaultValue=""
+                            placeholder="Responsabilities"
                             rows="4"
                             type="textarea"
                           />
@@ -175,16 +205,14 @@ class UserProfile extends React.Component {
                       <img
                         alt="..."
                         className="avatar"
-                        src={require("assets/img/emilyz.jpg")}
+                        src={require("assets/img/anime3.png")}
                       />
-                      <h5 className="title">Mike Andrew</h5>
+                      <h5 className="title">Samih Sghier</h5>
                     </a>
-                    <p className="description">Ceo/Co-Founder</p>
+                    <p className="description">Student</p>
                   </div>
                   <div className="card-description">
-                    Do not be scared of the truth because we need to restart the
-                    human foundation in truth And I love you like Kanye loves
-                    Kanye I love Rick Owens’ bed design but the back is...
+                    I am looking for an internship for Fall 2020/2021 as a software developer.
                   </div>
                 </CardBody>
                 <CardFooter>

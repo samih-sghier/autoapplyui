@@ -136,7 +136,7 @@ class AdminNavbar extends React.Component {
                     color="link"
                     data-target="#searchModal"
                     data-toggle="modal"
-                    id="search-button"
+                    id="search-button"  
                     onClick={this.toggleModalSearch}
                   >
                     <i className="tim-icons icon-zoom-split" />

@@ -1,7 +1,5 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import uuid from 'uuid/v1';
-
-
 // reactstrap components
 import {
     FormGroup,
@@ -10,16 +8,19 @@ import {
     CardTitle,
 } from "reactstrap";
 
+import FixedPlugin from "../components/FixedPlugin/FixedPlugin";
+
 let positionsToApply = [];
 
 const Posts = ({ result, loading, resetCart, setResetCart }) => {
+
     if (resetCart) {
         while (positionsToApply.length > 0) {
             positionsToApply.pop();
         }
         result.map(val => {
             val.isChecked = false;
-          });       
+        });
         setResetCart(false);
         console.log("empty " + positionsToApply);
     }
@@ -36,7 +37,6 @@ const Posts = ({ result, loading, resetCart, setResetCart }) => {
             </tbody>
         )
     }
-
     const handleCheckMark = (post) => {
         if (!post.isChecked) {
             post.isChecked = true;
@@ -46,10 +46,12 @@ const Posts = ({ result, loading, resetCart, setResetCart }) => {
             positionsToApply.pop(post)
         }
         console.log(positionsToApply);
+
     };
 
     return (
         <>
+            <FixedPlugin cartContent={"samih"} />
             <thead className="text-primary">
                 <tr>
                     <th></th>
@@ -85,8 +87,8 @@ const Posts = ({ result, loading, resetCart, setResetCart }) => {
                 ))}
             </tbody>
         </>
+
     );
 };
-
 
 export default Posts;

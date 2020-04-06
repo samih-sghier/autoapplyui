@@ -94,12 +94,12 @@ const Tables = () => {
   const setFilterCountry = (theCountry) => {
     setCountry(theCountry);
   }
-  
+
   const setFilterDescription = (theDescription) => {
     setDescription(theDescription);
   }
 
-  const handleSubmitFilter = () => {
+  const handleSubmitFilter = () => {
     setUrl(`http://127.0.0.1:8080/api/bigfilter/?city=${city}&comm=${commitment}&comp=${company}&country=${country}&desc=${description}&job=${title}&src=lever`);
     //reset data
     setCity("");
@@ -116,43 +116,50 @@ const Tables = () => {
     setModalShow(true);
   }
 
+  const hideModal = () => {
+    setModalShow(false);
+  }
+  
   return (
-    <div className="content">
-      <Row>
-        <Col md="12">
-          <Card>
-            {!loading ?
-              <CardHeader>
-                <Button className="btn btn-primary pull-left" color="danger" onClick={reRender}>Submit</Button>
-                <Filter 
-                className="popup-content" 
-                modalShow={modalShow} 
-                setFilterCity = {setFilterCity}
-                setFilterTitle = {setFilterTitle}
-                setFilterCommitment = {setFilterCommitment}
-                setFilterCompany = {setFilterCompany}
-                setFilterCountry = {setFilterCountry}
-                setFilterDescription = {setFilterDescription}
-                handleSubmit = {handleSubmitFilter}
-                ></Filter>
-                <Button className="pull-left" color="info" onClick={showModal}>Filter</Button>
-                <CardTitle className="text-success pull-right" tag="h4">{result.length} Available Positions</CardTitle>
-              </CardHeader> : null
-            }
-            <CardBody>
-              <Table className="tablesorter" responsive>
-                <Posts result={currentPosts} loading={loading} resetCart = {resetCart} setResetCart = {setResetCart} />
-              </Table>
-            </CardBody>
-            <Pagination
-              postsPerPage={postsPerPage}
-              totalPosts={result.length}
-              paginate={paginate}
-            />
-          </Card>
-        </Col>
-      </Row>
-    </div>
+    <>
+      <div className="content">
+        <Row>
+          <Col md="12">
+            <Card>
+              {!loading ?
+                <CardHeader>
+                  <Button className="btn btn-primary pull-left" color="danger" onClick={reRender}>Submit</Button>
+                    <Filter
+                      className="popup-content"
+                      modalShow={modalShow}
+                      hideModal={hideModal}
+                      setFilterCity={setFilterCity}
+                      setFilterTitle={setFilterTitle}
+                      setFilterCommitment={setFilterCommitment}
+                      setFilterCompany={setFilterCompany}
+                      setFilterCountry={setFilterCountry}
+                      setFilterDescription={setFilterDescription}
+                      handleSubmit={handleSubmitFilter}
+                    ></Filter>
+                  <Button className="pull-left" color="info" onClick={showModal}>Filter</Button>
+                  <CardTitle className="text-success pull-right" tag="h4">{result.length} Available Positions</CardTitle>
+                </CardHeader> : null
+              }
+              <CardBody>
+                <Table className="tablesorter" responsive>
+                  <Posts result={currentPosts} loading={loading} resetCart={resetCart} setResetCart={setResetCart} />
+                </Table>
+              </CardBody>
+              <Pagination
+                postsPerPage={postsPerPage}
+                totalPosts={result.length}
+                paginate={paginate}
+              />
+            </Card>
+          </Col>
+        </Row>
+      </div>
+    </>
   );
 }
 
