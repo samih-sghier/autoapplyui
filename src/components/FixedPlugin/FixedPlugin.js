@@ -15,10 +15,11 @@
 * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 
 */
-import React, {Component} from "react";
-
+import React, { Component } from "react";
+import { Badge } from '@material-ui/core';
 
 class FixedPlugin extends Component {
+
   constructor(props) {
     super(props);
     console.log(this.props);
@@ -53,7 +54,9 @@ class FixedPlugin extends Component {
           <div className={this.state.classes}>
             <div onClick={this.handleClick}>
               <div className="font-icon-detail">
-                <i className="tim-icons icon-cart" />
+                <Badge badgeContent={1} color="secondary">
+                  <i className="tim-icons icon-cart" />
+                </Badge>
               </div>
             </div>
             <ul className="dropdown-menu show">
@@ -108,7 +111,7 @@ class FixedPlugin extends Component {
                 <span className="color-label">DARK MODE</span>{" "}
               </li>
               <div>
-                {/* {console.log(this.props.cartContent)} */}
+                {console.log("cart content" + this.props.cartContent)}
               </div>
             </ul>
           </div>

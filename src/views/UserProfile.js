@@ -37,7 +37,18 @@ class UserProfile extends React.Component {
     super(props);
     this.state = {
       uploadedFileName: "No File Found",
-      file: []
+      file: [],
+      username: '',
+      email:'',
+      firstName:'',
+      lastName: '',
+      address:'',
+      city:'',
+      country:'',
+      postalCode:'',
+      currentJobTitle:'',
+      currentCompany:'',
+      currentJobDescription:''
     };
   }
 
@@ -47,6 +58,12 @@ class UserProfile extends React.Component {
       uploadedFileName: event.target.files[0].name
     });
   };
+
+  handleSaveButton = () => {
+    this.setState({
+      
+    })
+  }
 
   render() {
     return (
@@ -80,6 +97,7 @@ class UserProfile extends React.Component {
                             defaultValue=""
                             placeholder="Username"
                             type="text"
+                            // onChange= 
                           />
                         </FormGroup>
                       </Col>
@@ -98,7 +116,7 @@ class UserProfile extends React.Component {
                           <label>First Name</label>
                           <Input
                             defaultValue=""
-                            placeholder="Company"
+                            placeholder="Name"
                             type="text"
                           />
                         </FormGroup>
@@ -186,7 +204,7 @@ class UserProfile extends React.Component {
                   </Form>
                 </CardBody>
                 <CardFooter>
-                  <Button className="btn-fill" color="primary" type="submit">
+                  <Button className="btn-fill" color="primary" type="submit" >
                     Save
                   </Button>
                 </CardFooter>

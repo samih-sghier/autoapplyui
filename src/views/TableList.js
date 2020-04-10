@@ -48,18 +48,18 @@ const Tables = () => {
   const [commitment, setCommitment] = useState("");
   const [description, setDescription] = useState("");
   const [resetCart, setResetCart] = useState(false);
-
   useEffect(() => {
     const fetchPosts = async () => {
       const response = await axios.get(url);
-      response.data.map(val => {
-        val.isChecked = false;
-      });
+        response.data.map(val => {
+          val.isChecked = false;
+        });
       setResult(response.data);
       setLoading(false);
+      console.log("rerend");
     };
     fetchPosts();
-  }, [url, currentPage]);
+  }, [url]);
 
   const reRender = () => {
     setUrl('http://127.0.0.1:8080/api/indexed/?endIndex=1000&src=lever&startIndex=1');
@@ -119,7 +119,7 @@ const Tables = () => {
   const hideModal = () => {
     setModalShow(false);
   }
-  
+
   return (
     <>
       <div className="content">
@@ -129,18 +129,18 @@ const Tables = () => {
               {!loading ?
                 <CardHeader>
                   <Button className="btn btn-primary pull-left" color="danger" onClick={reRender}>Submit</Button>
-                    <Filter
-                      className="popup-content"
-                      modalShow={modalShow}
-                      hideModal={hideModal}
-                      setFilterCity={setFilterCity}
-                      setFilterTitle={setFilterTitle}
-                      setFilterCommitment={setFilterCommitment}
-                      setFilterCompany={setFilterCompany}
-                      setFilterCountry={setFilterCountry}
-                      setFilterDescription={setFilterDescription}
-                      handleSubmit={handleSubmitFilter}
-                    ></Filter>
+                  <Filter
+                    className="popup-content"
+                    modalShow={modalShow}
+                    hideModal={hideModal}
+                    setFilterCity={setFilterCity}
+                    setFilterTitle={setFilterTitle}
+                    setFilterCommitment={setFilterCommitment}
+                    setFilterCompany={setFilterCompany}
+                    setFilterCountry={setFilterCountry}
+                    setFilterDescription={setFilterDescription}
+                    handleSubmit={handleSubmitFilter}
+                  ></Filter>
                   <Button className="pull-left" color="info" onClick={showModal}>Filter</Button>
                   <CardTitle className="text-success pull-right" tag="h4">{result.length} Available Positions</CardTitle>
                 </CardHeader> : null

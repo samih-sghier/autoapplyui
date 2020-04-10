@@ -45,8 +45,7 @@ const Posts = ({ result, loading, resetCart, setResetCart }) => {
             post.isChecked = false;
             positionsToApply.pop(post)
         }
-        console.log(positionsToApply);
-
+        console.log("cart content " + positionsToApply.length);
     };
 
     return (
@@ -68,7 +67,8 @@ const Posts = ({ result, loading, resetCart, setResetCart }) => {
                         <td>
                             <FormGroup check>
                                 <Label check>
-                                    <Input type="checkbox"
+                                    <Input type="checkbox" 
+                                        defaultChecked = {post.isChecked}
                                         onChange={(event) => handleCheckMark(post)}
                                     />
                                     <span className="form-check-sign">

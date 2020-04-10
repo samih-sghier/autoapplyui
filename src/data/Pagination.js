@@ -11,11 +11,10 @@ const Pagination = ({ postsPerPage, totalPosts, paginate }) => {
     // const [endPagesIndex, setEndPagesIndex] = useState(10);
     let currentStreamOfPages = pageNumbers.slice(startPagesIndex, endPagesIndex);
     // const [currentStreamOfPages, setCurrenStreamOfPages] = useState([]);
-
+    
     useEffect(() => {
          }, []);
     
-
     const handleStreamOfPages = (pageNumber, index) => {
         if (index == currentStreamOfPages.length - 1) {
             startPagesIndex = 10;
@@ -24,8 +23,7 @@ const Pagination = ({ postsPerPage, totalPosts, paginate }) => {
         }
         paginate(pageNumber);
     };
-
-    
+ 
     const renderPageNumbers =  currentStreamOfPages.slice(startPagesIndex, endPagesIndex).map((number, index) => {
            return(<li key={number} className='page-item '>
                 <a onClick={() => handleStreamOfPages(number, index)} className='page-link '>
