@@ -10338,7 +10338,6 @@ hr {
   color: #9A9A9A; }
 
 .fixed-plugin {
-  position: fixed;
   right: 0;
   width: 64px;
   background: rgba(0, 0, 0, 0.3);

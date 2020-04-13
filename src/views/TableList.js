@@ -48,6 +48,8 @@ const Tables = () => {
   const [commitment, setCommitment] = useState("");
   const [description, setDescription] = useState("");
   const [resetCart, setResetCart] = useState(false);
+  
+
   useEffect(() => {
     const fetchPosts = async () => {
       const response = await axios.get(url);
@@ -120,6 +122,10 @@ const Tables = () => {
     setModalShow(false);
   }
 
+  const setCartContent = () => {
+    setModalShow(false);
+  }
+
   return (
     <>
       <div className="content">
@@ -147,7 +153,12 @@ const Tables = () => {
               }
               <CardBody>
                 <Table className="tablesorter" responsive>
-                  <Posts result={currentPosts} loading={loading} resetCart={resetCart} setResetCart={setResetCart} />
+                  <Posts 
+                   result={currentPosts}
+                   loading={loading} 
+                   resetCart={resetCart} 
+                   setResetCart={setResetCart} 
+                   />
                 </Table>
               </CardBody>
               <Pagination

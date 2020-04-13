@@ -11,19 +11,26 @@ import {
 import FixedPlugin from "../components/FixedPlugin/FixedPlugin";
 
 let positionsToApply = [];
-
 const Posts = ({ result, loading, resetCart, setResetCart }) => {
+    const [cartContent, setCartContent] = useState([]);
+    const [cartSize, setCartSize] = useState();
+
 
     if (resetCart) {
-        while (positionsToApply.length > 0) {
-            positionsToApply.pop();
-        }
+        // while (positionsToApply.length > 0) {
+        //     positionsToApply.pop();
+        // }
         result.map(val => {
-            val.isChecked = false;
+            if (!positionsToApply.includes(val)) {
+                val.isChecked = false;
+            } else {
+                val.isChecked = true;
+            }
         });
+
         setResetCart(false);
-        console.log("empty " + positionsToApply);
     }
+
     if (loading) {
         return (
             <tbody>
@@ -37,20 +44,25 @@ const Posts = ({ result, loading, resetCart, setResetCart }) => {
             </tbody>
         )
     }
+
     const handleCheckMark = (post) => {
         if (!post.isChecked) {
             post.isChecked = true;
-            positionsToApply.push(post);
+            if (!positionsToApply.includes(post, 0)) positionsToApply.push(post);
         } else if (post.isChecked) {
             post.isChecked = false;
             positionsToApply.pop(post)
         }
-        console.log("cart content " + positionsToApply.length);
+        setCartContent(positionsToApply);
+        setCartSize(positionsToApply.length);
     };
+
 
     return (
         <>
-            <FixedPlugin cartContent={"samih"} />
+            <div className="fixed-plugin">
+                <FixedPlugin cartSize={cartSize} cartContent={cartContent} />
+            </div>
             <thead className="text-primary">
                 <tr>
                     <th></th>
@@ -67,8 +79,8 @@ const Posts = ({ result, loading, resetCart, setResetCart }) => {
                         <td>
                             <FormGroup check>
                                 <Label check>
-                                    <Input type="checkbox" 
-                                        defaultChecked = {post.isChecked}
+                                    <Input type="checkbox"
+                                        defaultChecked={post.isChecked}
                                         onChange={(event) => handleCheckMark(post)}
                                     />
                                     <span className="form-check-sign">
