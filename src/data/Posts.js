@@ -47,21 +47,28 @@ const Posts = ({ result, loading, resetCart, setResetCart }) => {
 
     const handleCheckMark = (post) => {
         if (!post.isChecked) {
-            post.isChecked = true;
-            if (!positionsToApply.includes(post, 0)) positionsToApply.push(post);
+            addPostToShoppingCart(post);
         } else if (post.isChecked) {
-            post.isChecked = false;
-            positionsToApply.pop(post)
+            deletePostFromShoppingCart(post);
         }
         setCartContent(positionsToApply);
         setCartSize(positionsToApply.length);
     };
 
+    const addPostToShoppingCart = (post) => {
+        post.isChecked = true;
+        if (!positionsToApply.includes(post, 0)) positionsToApply.push(post);
+    }
+
+    const deletePostFromShoppingCart = (post) => {
+        post.isChecked = false;            
+        positionsToApply.splice(positionsToApply.indexOf(post), 1);
+    }
 
     return (
         <>
             <div className="fixed-plugin">
-                <FixedPlugin cartSize={cartSize} cartContent={cartContent} />
+                <FixedPlugin cartSize={cartSize} cartContent={cartContent} removePostFromCart = {deletePostFromShoppingCart} />
             </div>
             <thead className="text-primary">
                 <tr>

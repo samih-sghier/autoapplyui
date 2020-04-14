@@ -24,7 +24,6 @@ import PerfectScrollbar from "perfect-scrollbar";
 import AdminNavbar from "components/Navbars/AdminNavbar.js";
 import Footer from "components/Footer/Footer.js";
 import Sidebar from "components/Sidebar/Sidebar.js";
-import FixedPlugin from "components/FixedPlugin/FixedPlugin.js";
 
 import routes from "routes.js";
 
@@ -41,6 +40,7 @@ class Admin extends React.Component {
         document.documentElement.className.indexOf("nav-open") !== -1
     };
   }
+  
   componentDidMount() {
     if (navigator.platform.indexOf("Win") > -1) {
       document.documentElement.className += " perfect-scrollbar-on";
@@ -52,6 +52,7 @@ class Admin extends React.Component {
       }
     }
   }
+
   componentWillUnmount() {
     if (navigator.platform.indexOf("Win") > -1) {
       ps.destroy();
@@ -59,6 +60,7 @@ class Admin extends React.Component {
       document.documentElement.classList.remove("perfect-scrollbar-on");
     }
   }
+
   componentDidUpdate(e) {
     if (e.history.action === "PUSH") {
       if (navigator.platform.indexOf("Win") > -1) {
@@ -72,11 +74,13 @@ class Admin extends React.Component {
       this.refs.mainPanel.scrollTop = 0;
     }
   }
+
   // this function opens and closes the sidebar on small devices
   toggleSidebar = () => {
     document.documentElement.classList.toggle("nav-open");
     this.setState({ sidebarOpened: !this.state.sidebarOpened });
   };
+
   getRoutes = routes => {
     return routes.map((prop, key) => {
       if (prop.layout === "/admin") {
@@ -142,10 +146,6 @@ class Admin extends React.Component {
             )}
           </div>
         </div>
-        <FixedPlugin
-          bgColor={this.state.backgroundColor}
-          handleBgClick={this.handleBgClick}
-        />
       </>
     );
   }

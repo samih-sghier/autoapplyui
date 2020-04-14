@@ -39,16 +39,16 @@ class UserProfile extends React.Component {
       uploadedFileName: "No File Found",
       file: [],
       username: '',
-      email:'',
-      firstName:'',
+      email: '',
+      firstName: '',
       lastName: '',
-      address:'',
-      city:'',
-      country:'',
-      postalCode:'',
-      currentJobTitle:'',
-      currentCompany:'',
-      currentJobDescription:''
+      address: '',
+      city: '',
+      country: '',
+      postalCode: '',
+      currentJobTitle: '',
+      currentCompany: '',
+      currentJobDescription: ''
     };
   }
 
@@ -61,7 +61,7 @@ class UserProfile extends React.Component {
 
   handleSaveButton = () => {
     this.setState({
-      
+
     })
   }
 
@@ -97,7 +97,7 @@ class UserProfile extends React.Component {
                             defaultValue=""
                             placeholder="Username"
                             type="text"
-                            // onChange= 
+                          // onChange= 
                           />
                         </FormGroup>
                       </Col>

@@ -19,12 +19,16 @@ import React, { useState } from "react";
 import { Badge } from '@material-ui/core';
 import CartData from "components/FixedPlugin/CartData";
 
-const FixedPlugin = ({ cartSize, cartContent, classes }) => {
-  const [openCartModal, setOpenCartModel] = useState(false);
+const FixedPlugin = ({ cartSize, cartContent, classes, removePostFromCart }) => {
+  const [cartModalState, setCarModalState] = useState(false);
 
   const openCartPopup = () => {
-    setOpenCartModel(!openCartModal);
+    setCarModalState(!cartModalState);
   }
+  const removePost = (post) => {
+    removePostFromCart(post);
+  }
+  
 
   return (
     <>
@@ -35,7 +39,7 @@ const FixedPlugin = ({ cartSize, cartContent, classes }) => {
               <i className="tim-icons icon-cart" />
             </Badge>
           </div>
-            <CartData cartData={cartContent} openCartModal={openCartModal} controlModal={openCartPopup} />
+            <CartData cartData={cartContent} openCartModal={cartModalState} controlModal={openCartPopup} removePost={removePost} />
         </div>
       </div>
     </>
