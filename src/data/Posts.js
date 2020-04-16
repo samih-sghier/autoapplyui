@@ -9,28 +9,24 @@ import {
 } from "reactstrap";
 
 import FixedPlugin from "../components/FixedPlugin/FixedPlugin";
+import { bool } from "prop-types";
 
-let positionsToApply = [];
-const Posts = ({ result, loading, resetCart, setResetCart }) => {
-    const [cartContent, setCartContent] = useState([]);
-    const [cartSize, setCartSize] = useState();
 
+const Posts = ({ result, loading, resetCart, setResetCart, cartSize,  checkAll, handleCheckMark, cartContent, deletePostFromShoppingCart}) => {
 
     if (resetCart) {
         // while (positionsToApply.length > 0) {
         //     positionsToApply.pop();
         // }
         result.map(val => {
-            if (!positionsToApply.includes(val)) {
+            if (!cartContent.includes(val)) {
                 val.isChecked = false;
             } else {
                 val.isChecked = true;
             }
         });
-
         setResetCart(false);
     }
-
     if (loading) {
         return (
             <tbody>
@@ -45,38 +41,39 @@ const Posts = ({ result, loading, resetCart, setResetCart }) => {
         )
     }
 
-    const handleCheckMark = (post) => {
-        if (!post.isChecked) {
-            addPostToShoppingCart(post);
-        } else if (post.isChecked) {
-            deletePostFromShoppingCart(post);
-        }
-        setCartContent(positionsToApply);
-        setCartSize(positionsToApply.length);
-    };
-
-    const addPostToShoppingCart = (post) => {
-        post.isChecked = true;
-        if (!positionsToApply.includes(post, 0)) positionsToApply.push(post);
-    }
-
-    const deletePostFromShoppingCart = (post) => {
-        post.isChecked = false;            
-        positionsToApply.splice(positionsToApply.indexOf(post), 1);
-    }
+    
 
     return (
-        <>
+
+        <>{result.map(val => {
+            if (!cartContent.includes(val)) {
+                val.isChecked = false;
+            } else {
+                val.isChecked = true;
+            }
+        })}
             <div className="fixed-plugin">
-                <FixedPlugin cartSize={cartSize} cartContent={cartContent} removePostFromCart = {deletePostFromShoppingCart} />
+                <FixedPlugin cartSize={cartSize} cartContent={cartContent} removePostFromCart={deletePostFromShoppingCart} />
             </div>
             <thead className="text-primary">
                 <tr>
-                    <th></th>
+                    <th><FormGroup check>
+                        <Label check>
+                            <Input type="checkbox"
+                                defaultChecked={false}
+                                onChange={checkAll}
+                            />
+                            <span className="form-check-sign">
+                                <span className="check" />
+                            </span>
+                        </Label>
+                    </FormGroup>
+                    </th>
                     <th>title</th>
                     <th>company</th>
                     <th>location</th>
                     <th>commitment</th>
+                    <th>description</th>
                     <th className="text-center">team</th>
                 </tr>
             </thead>
@@ -101,6 +98,7 @@ const Posts = ({ result, loading, resetCart, setResetCart }) => {
                         {/* <td>{post.content.slice(0, 80)}...</td> */}
                         <td>{post.location}</td>
                         <td>{post.commitment}</td>
+                <td>{post.description}</td>
                         <td className="text-center">{post.team}</td>
                     </tr>
                 ))}

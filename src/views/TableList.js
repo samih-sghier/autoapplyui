@@ -33,6 +33,8 @@ import Posts from "../data/Posts";
 import Filter from "../data/Filter";
 import Pagination from "../data/Pagination";
 
+let positionsToApply = [];
+
 const Tables = () => {
 
   const [url, setUrl] = useState('http://127.0.0.1:8080/api/indexed/?endIndex=100&src=lever&startIndex=98');
@@ -47,24 +49,30 @@ const Tables = () => {
   const [title, setTitle] = useState("");
   const [commitment, setCommitment] = useState("");
   const [description, setDescription] = useState("");
+  const [cartContent, setCartContent] = useState([]);
+  const [cartSize, setCartSize] = useState(0);
   const [resetCart, setResetCart] = useState(false);
-  
+  const [checkAllPositions, setCheckAllPositioons] = useState(false);
+
+
 
   useEffect(() => {
     const fetchPosts = async () => {
       const response = await axios.get(url);
-        response.data.map(val => {
-          val.isChecked = false;
-        });
+      response.data.map(val => {
+        val.isChecked = false;
+      });
       setResult(response.data);
       setLoading(false);
-      console.log("rerend");
     };
     fetchPosts();
   }, [url]);
 
-  const reRender = () => {
+  const handleApply = () => {
     setUrl('http://127.0.0.1:8080/api/indexed/?endIndex=1000&src=lever&startIndex=1');
+    cartContent.map(val => {
+      console.log("title: " + JSON.stringify(val.text));
+    });
   };
 
   // Get current posts
@@ -122,8 +130,47 @@ const Tables = () => {
     setModalShow(false);
   }
 
-  const setCartContent = () => {
-    setModalShow(false);
+  const setCart = (cart) => {
+    setCartContent(cart);
+    setCartSize(cart.length);
+  }
+
+  const checkAll = () => {
+    result.map(val => {
+      val.isChecked = !checkAllPositions;
+    })
+    if (!checkAllPositions) {
+      setCart(result);
+    } else {
+      setCart([]);
+    }
+    setCheckAllPositioons(!checkAllPositions);
+  }
+
+  const handleCheckMark = (post) => {
+    if (!post.isChecked) {
+      addPostToShoppingCart(post);
+    } else if (post.isChecked) {
+      deletePostFromShoppingCart(post);
+    }
+    setCart(positionsToApply);
+  };
+
+
+  const addPostToShoppingCart = (post) => {
+    post.isChecked = true;
+    var isFound = false;
+    cartContent.map(val => {
+      if (JSON.stringify(val.id) === JSON.stringify(post.id)) isFound = true;
+    })
+    if (!isFound) {
+      positionsToApply.push(post);
+    }
+  }
+
+  const deletePostFromShoppingCart = (post) => {
+    post.isChecked = false;
+    positionsToApply.splice(positionsToApply.indexOf(post), 1);
   }
 
   return (
@@ -134,7 +181,7 @@ const Tables = () => {
             <Card>
               {!loading ?
                 <CardHeader>
-                  <Button className="btn btn-primary pull-left" color="danger" onClick={reRender}>Submit</Button>
+                  <Button className="btn btn-primary pull-left" color="danger" onClick={handleApply}>Apply to Jobs in Cart</Button>
                   <Filter
                     className="popup-content"
                     modalShow={modalShow}
@@ -153,12 +200,17 @@ const Tables = () => {
               }
               <CardBody>
                 <Table className="tablesorter" responsive>
-                  <Posts 
-                   result={currentPosts}
-                   loading={loading} 
-                   resetCart={resetCart} 
-                   setResetCart={setResetCart} 
-                   />
+                  <Posts
+                    result={currentPosts}
+                    loading={loading}
+                    resetCart={resetCart}
+                    setResetCart={setResetCart}
+                    cartSize={cartSize}
+                    cartContent={cartContent}
+                    checkAll={checkAll}
+                    handleCheckMark={handleCheckMark}
+                    deletePostFromShoppingCart={deletePostFromShoppingCart}
+                  />
                 </Table>
               </CardBody>
               <Pagination

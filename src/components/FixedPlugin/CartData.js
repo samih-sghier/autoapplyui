@@ -3,8 +3,6 @@ import React, { useEffect, useState } from "react";
 
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 
-import { Badge } from '@material-ui/core';
-
 const CartData = ({ cartData, openCartModal, controlModal, removePost }) => {
     let showContent = false;
     if (cartData != null) showContent = true;

@@ -25,10 +25,6 @@ const FixedPlugin = ({ cartSize, cartContent, classes, removePostFromCart }) => 
   const openCartPopup = () => {
     setCarModalState(!cartModalState);
   }
-  const removePost = (post) => {
-    removePostFromCart(post);
-  }
-  
 
   return (
     <>
@@ -39,12 +35,11 @@ const FixedPlugin = ({ cartSize, cartContent, classes, removePostFromCart }) => 
               <i className="tim-icons icon-cart" />
             </Badge>
           </div>
-            <CartData cartData={cartContent} openCartModal={cartModalState} controlModal={openCartPopup} removePost={removePost} />
+            <CartData cartData={cartContent} openCartModal={cartModalState} controlModal={openCartPopup} removePost={removePostFromCart} />
         </div>
       </div>
     </>
   );
 }
-
 
 export default FixedPlugin;
