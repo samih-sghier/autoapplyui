@@ -61,6 +61,7 @@ const Tables = () => {
       const response = await axios.get(url);
       response.data.map(val => {
         val.isChecked = false;
+        
       });
       setResult(response.data);
       setLoading(false);
@@ -181,7 +182,8 @@ const Tables = () => {
             <Card>
               {!loading ?
                 <CardHeader>
-                  <Button className="btn btn-primary pull-left" color="danger" onClick={handleApply}>Apply to Jobs in Cart</Button>
+                  <Button className="btn btn-primary pull-left" color="danger" onClick={handleApply}>
+                    Apply to Jobs in Cart</Button>
                   <Filter
                     className="popup-content"
                     modalShow={modalShow}

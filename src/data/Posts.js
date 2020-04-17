@@ -9,7 +9,7 @@ import {
 } from "reactstrap";
 
 import FixedPlugin from "../components/FixedPlugin/FixedPlugin";
-import { bool } from "prop-types";
+import TextTruncate from 'react-text-truncate'; 
 
 
 const Posts = ({ result, loading, resetCart, setResetCart, cartSize,  checkAll, handleCheckMark, cartContent, deletePostFromShoppingCart}) => {
@@ -40,8 +40,6 @@ const Posts = ({ result, loading, resetCart, setResetCart, cartSize,  checkAll, 
             </tbody>
         )
     }
-
-    
 
     return (
 
@@ -98,7 +96,13 @@ const Posts = ({ result, loading, resetCart, setResetCart, cartSize,  checkAll, 
                         {/* <td>{post.content.slice(0, 80)}...</td> */}
                         <td>{post.location}</td>
                         <td>{post.commitment}</td>
-                <td>{post.description}</td>
+                        <td>
+                        <TextTruncate
+                        element="span"
+                        truncateText="…"
+                        text = {post.descriptionOfPosition}
+                        textTruncateChild={<a href="#">more</a>}
+                        /></td>
                         <td className="text-center">{post.team}</td>
                     </tr>
                 ))}
