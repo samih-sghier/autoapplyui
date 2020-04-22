@@ -22,6 +22,8 @@ import { Router, Route, Switch, Redirect } from "react-router-dom";
 
 import AdminLayout from "layouts/Admin/Admin.js";
 import RTLLayout from "layouts/RTL/RTL.js";
+import Login from "views/Login";
+
 
 import "assets/scss/black-dashboard-react.scss";
 import "assets/demo/demo.css";
@@ -29,9 +31,27 @@ import "assets/css/nucleo-icons.css";
 
 const hist = createBrowserHistory();
 
+const checkAuth = () => {
+
+}
+
+const AuthenticatedRoute = ({ component: Component, ...rest }) => (
+  <Route {...rest} render={props => (
+    checkAuth() ? (
+      <Component {...props}/>
+    ) : (
+      <Redirect to={{
+        pathname: '/sign_in',
+        state: { from: props.location }
+      }}/>
+    )
+  )}/>
+)
+
 ReactDOM.render(
   <Router history={hist}>
     <Switch>
+      <Route path="/login" component= {Login} />} />
       <Route path="/admin" render={props => <AdminLayout {...props} />} />
       <Route path="/rtl" render={props => <RTLLayout {...props} />} />
       <Redirect from="/" to="/admin/dashboard" />

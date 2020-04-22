@@ -9,26 +9,15 @@ import {
 } from "reactstrap";
 
 import FixedPlugin from "../components/FixedPlugin/FixedPlugin";
-import TextTruncate from 'react-text-truncate'; 
+import TextTruncate from 'react-text-truncate';
 
 
-const Posts = ({ result, loading, resetCart, setResetCart, cartSize,  checkAll, handleCheckMark, cartContent, deletePostFromShoppingCart}) => {
-
-    if (resetCart) {
-        // while (positionsToApply.length > 0) {
-        //     positionsToApply.pop();
-        // }
-        result.map(val => {
-            if (!cartContent.includes(val)) {
-                val.isChecked = false;
-            } else {
-                val.isChecked = true;
-            }
-        });
-        setResetCart(false);
-    }
+const Posts = ({ result, loading, resetCart, setResetCart, cartSize, checkAll, handleCheckMark, cartContent, deletePostFromShoppingCart, rowsPerPage, page }) => {
+    let preSet = false;
     if (loading) {
+
         return (
+
             <tbody>
                 <tr key={uuid()}>
                     <td>
@@ -42,14 +31,7 @@ const Posts = ({ result, loading, resetCart, setResetCart, cartSize,  checkAll, 
     }
 
     return (
-
-        <>{result.map(val => {
-            if (!cartContent.includes(val)) {
-                val.isChecked = false;
-            } else {
-                val.isChecked = true;
-            }
-        })}
+        <>
             <div className="fixed-plugin">
                 <FixedPlugin cartSize={cartSize} cartContent={cartContent} removePostFromCart={deletePostFromShoppingCart} />
             </div>
@@ -75,8 +57,11 @@ const Posts = ({ result, loading, resetCart, setResetCart, cartSize,  checkAll, 
                     <th className="text-center">team</th>
                 </tr>
             </thead>
-            <tbody>
-                {result.map(post => (
+            {!preSet ? <tbody>
+                {(rowsPerPage > 0
+                        ? result.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                        : result
+                    ).map(post => (
                     <tr key={uuid()}>
                         <td>
                             <FormGroup check>
@@ -97,16 +82,18 @@ const Posts = ({ result, loading, resetCart, setResetCart, cartSize,  checkAll, 
                         <td>{post.location}</td>
                         <td>{post.commitment}</td>
                         <td>
-                        <TextTruncate
-                        element="span"
-                        truncateText="…"
-                        text = {post.descriptionOfPosition}
-                        textTruncateChild={<a href="#">more</a>}
-                        /></td>
+                            <TextTruncate
+                                element="span"
+                                truncateText="…"
+                                text={post.descriptionOfPosition}
+                                textTruncateChild={<a href="#">more</a>}
+                            /></td>
                         <td className="text-center">{post.team}</td>
                     </tr>
                 ))}
             </tbody>
+                : null
+            }
         </>
 
     );

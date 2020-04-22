@@ -31,7 +31,9 @@ import {
 } from "reactstrap";
 import Posts from "../data/Posts";
 import Filter from "../data/Filter";
-import Pagination from "../data/Pagination";
+import TablePagination from '@material-ui/core/TablePagination';
+import PaginationActions from "../components/Pagination/PaginationActions";
+
 
 let positionsToApply = [];
 
@@ -53,7 +55,8 @@ const Tables = () => {
   const [cartSize, setCartSize] = useState(0);
   const [resetCart, setResetCart] = useState(false);
   const [checkAllPositions, setCheckAllPositioons] = useState(false);
-
+  const [page, setPage] = React.useState(0);
+  const [rowsPerPage, setRowsPerPage] = React.useState(3);
 
 
   useEffect(() => {
@@ -61,7 +64,6 @@ const Tables = () => {
       const response = await axios.get(url);
       response.data.map(val => {
         val.isChecked = false;
-        
       });
       setResult(response.data);
       setLoading(false);
@@ -75,16 +77,6 @@ const Tables = () => {
       console.log("title: " + JSON.stringify(val.text));
     });
   };
-
-  // Get current posts
-  const indexOfLastPost = currentPage * postsPerPage;
-  const indexOfFirstPost = indexOfLastPost - postsPerPage;
-  const currentPosts = result.slice(indexOfFirstPost, indexOfLastPost);
-
-  // Change page
-  const paginate = (pageNumber) => {
-    setCurrentPage(pageNumber);
-  }
 
   const setFilterCity = (theCity) => {
     setCity(theCity);
@@ -174,6 +166,16 @@ const Tables = () => {
     positionsToApply.splice(positionsToApply.indexOf(post), 1);
   }
 
+
+  const handleChangePage = (event, newPage) => {
+    setPage(newPage);
+  };
+
+  const handleChangeRowsPerPage = (event) => {
+    setRowsPerPage(parseInt(event.target.value, 10));
+    setPage(0);
+  };
+
   return (
     <>
       <div className="content">
@@ -203,23 +205,39 @@ const Tables = () => {
               <CardBody>
                 <Table className="tablesorter" responsive>
                   <Posts
-                    result={currentPosts}
+                    result={result}
                     loading={loading}
                     resetCart={resetCart}
                     setResetCart={setResetCart}
                     cartSize={cartSize}
                     cartContent={cartContent}
                     checkAll={checkAll}
+                    page = {page}
+                    rowsPerPage = {rowsPerPage}
                     handleCheckMark={handleCheckMark}
                     deletePostFromShoppingCart={deletePostFromShoppingCart}
                   />
                 </Table>
               </CardBody>
-              <Pagination
+              <TablePagination
+                rowsPerPageOptions={[3, 10, 15, { label: 'All', value: -1 }]}
+                colSpan={3}
+                count={result.length}
+                rowsPerPage={rowsPerPage}
+                page={page}
+                SelectProps={{
+                  inputProps: { 'aria-label': 'rows per page' },
+                  native: true,
+                }}
+                onChangePage={handleChangePage}
+                onChangeRowsPerPage={handleChangeRowsPerPage}
+                ActionsComponent={PaginationActions}
+              />
+              {/* <Pagination
                 postsPerPage={postsPerPage}
                 totalPosts={result.length}
                 paginate={paginate}
-              />
+              /> */}
             </Card>
           </Col>
         </Row>

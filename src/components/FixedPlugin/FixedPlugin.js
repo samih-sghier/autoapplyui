@@ -35,7 +35,7 @@ const FixedPlugin = ({ cartSize, cartContent, classes, removePostFromCart }) => 
               <i className="tim-icons icon-cart" />
             </Badge>
           </div>
-            <CartData cartData={cartContent} openCartModal={cartModalState} controlModal={openCartPopup} removePost={removePostFromCart} />
+            <CartData cartData={cartContent.slice(0, 30)} openCartModal={cartModalState} controlModal={openCartPopup} removePost={removePostFromCart} />
         </div>
       </div>
     </>

@@ -1,6 +1,6 @@
 
 import React, { useEffect, useState } from "react";
-
+import { ListItem } from '@material-ui/core';
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 
 const CartData = ({ cartData, openCartModal, controlModal, removePost }) => {
@@ -12,14 +12,15 @@ const CartData = ({ cartData, openCartModal, controlModal, removePost }) => {
                 <ModalHeader class="modal-title">Cart Content</ModalHeader>
                 <ModalBody class="modal-body">
                     <tbody>
+                        
                         {showContent ?
                             cartData.map(post => (
                                 <tr>
-                                    <td>{post.text}</td>
+                                    <td><ListItem button component="a" {...post.text} >{post.text}</ListItem></td>
                                     <td></td>
-                                    <td></td>
-                                    <td>           
-                                    <Button color="secondary">x</Button>
+                                    <td> </td>
+                                    <td>
+                                        <i className="tim-icons icon-simple-remove" onChange={removePost} />
                                     </td>
                                 </tr>
                             )) : ""}

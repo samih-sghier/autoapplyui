@@ -7,10 +7,7 @@ const Pagination = ({ postsPerPage, totalPosts, paginate }) => {
     }
     let startPagesIndex =0;
     let endPagesIndex = 20;
-    // const [startPagesIndex, setStartPagesIndex] = useState(0);
-    // const [endPagesIndex, setEndPagesIndex] = useState(10);
     let currentStreamOfPages = pageNumbers.slice(startPagesIndex, endPagesIndex);
-    // const [currentStreamOfPages, setCurrenStreamOfPages] = useState([]);
     
     useEffect(() => {
          }, []);
