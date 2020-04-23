@@ -42,8 +42,6 @@ const Tables = () => {
   const [url, setUrl] = useState('http://127.0.0.1:8080/api/indexed/?endIndex=100&src=lever&startIndex=98');
   const [loading, setLoading] = useState(true);
   const [result, setResult] = useState([]);
-  const [currentPage, setCurrentPage] = useState(1);
-  const [postsPerPage] = useState(10);
   const [modalShow, setModalShow] = useState(false);
   const [city, setCity] = useState("");
   const [country, setCountry] = useState("");
@@ -187,7 +185,6 @@ const Tables = () => {
                   <Button className="btn btn-primary pull-left" color="danger" onClick={handleApply}>
                     Apply to Jobs in Cart</Button>
                   <Filter
-                    className="popup-content"
                     modalShow={modalShow}
                     hideModal={hideModal}
                     setFilterCity={setFilterCity}
@@ -212,27 +209,28 @@ const Tables = () => {
                     cartSize={cartSize}
                     cartContent={cartContent}
                     checkAll={checkAll}
-                    page = {page}
-                    rowsPerPage = {rowsPerPage}
+                    page={page}
+                    rowsPerPage={rowsPerPage}
                     handleCheckMark={handleCheckMark}
                     deletePostFromShoppingCart={deletePostFromShoppingCart}
                   />
                 </Table>
+                <TablePagination
+                  rowsPerPageOptions={[3, 10, 15, { label: 'All', value: -1 }]}
+                  colSpan={3}
+                  count={result.length}
+                  rowsPerPage={rowsPerPage}
+                  page={page}
+                  SelectProps={{
+                    inputProps: { 'aria-label': 'rows per page' },
+                    native: true,
+                  }}
+                  onChangePage={handleChangePage}
+                  onChangeRowsPerPage={handleChangeRowsPerPage}
+                  ActionsComponent={PaginationActions}
+                />
               </CardBody>
-              <TablePagination
-                rowsPerPageOptions={[3, 10, 15, { label: 'All', value: -1 }]}
-                colSpan={3}
-                count={result.length}
-                rowsPerPage={rowsPerPage}
-                page={page}
-                SelectProps={{
-                  inputProps: { 'aria-label': 'rows per page' },
-                  native: true,
-                }}
-                onChangePage={handleChangePage}
-                onChangeRowsPerPage={handleChangeRowsPerPage}
-                ActionsComponent={PaginationActions}
-              />
+
               {/* <Pagination
                 postsPerPage={postsPerPage}
                 totalPosts={result.length}

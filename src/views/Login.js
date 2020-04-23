@@ -13,8 +13,6 @@ class Login extends Component {
 
     return (
       
-
-
       <GoogleLogin
         clientId="46635325496-p0s45m08iths3of0a1qfvmh778bj06na.apps.googleusercontent.com" //CLIENTID NOT CREATED YET
         buttonText="LOGIN WITH GOOGLE"
