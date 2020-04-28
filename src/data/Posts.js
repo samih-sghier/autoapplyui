@@ -15,9 +15,7 @@ import TextTruncate from 'react-text-truncate';
 const Posts = ({ result, loading, resetCart, setResetCart, cartSize, checkAll, handleCheckMark, cartContent, deletePostFromShoppingCart, rowsPerPage, page }) => {
     let preSet = false;
     if (loading) {
-
         return (
-
             <tbody>
                 <tr key={uuid()}>
                     <td>

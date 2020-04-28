@@ -28,6 +28,7 @@ import {
   Table,
   Row,
   Col,
+  Alert
 } from "reactstrap";
 import Posts from "../data/Posts";
 import Filter from "../data/Filter";
@@ -39,7 +40,7 @@ let positionsToApply = [];
 
 const Tables = () => {
 
-  const [url, setUrl] = useState('http://127.0.0.1:8080/api/indexed/?endIndex=100&src=lever&startIndex=98');
+  const [url, setUrl] = useState('http://127.0.0.1:8090/api/indexed/?endIndex=2000&src=lever&startIndex=0');
   const [loading, setLoading] = useState(true);
   const [result, setResult] = useState([]);
   const [modalShow, setModalShow] = useState(false);
@@ -51,11 +52,12 @@ const Tables = () => {
   const [description, setDescription] = useState("");
   const [cartContent, setCartContent] = useState([]);
   const [cartSize, setCartSize] = useState(0);
+  const [userId, setUserId] = useState('P8GhoDN052d2fIqpNGPAZ9nVDeu1');
   const [resetCart, setResetCart] = useState(false);
   const [checkAllPositions, setCheckAllPositioons] = useState(false);
+  const [applySuccess, setApplySuccess] = useState(false);
   const [page, setPage] = React.useState(0);
-  const [rowsPerPage, setRowsPerPage] = React.useState(3);
-
+  const [rowsPerPage, setRowsPerPage] = React.useState(10);
 
   useEffect(() => {
     const fetchPosts = async () => {
@@ -69,10 +71,31 @@ const Tables = () => {
     fetchPosts();
   }, [url]);
 
-  const handleApply = () => {
-    setUrl('http://127.0.0.1:8080/api/indexed/?endIndex=1000&src=lever&startIndex=1');
-    cartContent.map(val => {
-      console.log("title: " + JSON.stringify(val.text));
+  const handleApply = (event) => {
+    //  setUrl('http://127.0.0.1:8090/api/indexed/?endIndex=1000&src=lever&startIndex=1');
+    event.preventDefault();
+    let temp = [];
+    cartContent.map(positions => {
+      var innerData = [];
+      innerData.push(positions.text);
+      innerData.push(positions.applyUrl);
+      temp.push(positions);
+    });
+    axios({
+      method: 'post',     //post
+      url: `http://127.0.0.1:8080/apply/user`,
+      // headers: {'Authorization': 'Bearer'}, 
+      data: {
+        userId: userId,
+        positions: temp,
+      }
+    }).then(response => {
+      if (response.status === 200) {
+        setApplySuccess(true);
+        setResetCart(true);
+      }
+    }).catch(error => {
+      console.log(error);
     });
   };
 
@@ -101,7 +124,7 @@ const Tables = () => {
   }
 
   const handleSubmitFilter = () => {
-    setUrl(`http://127.0.0.1:8080/api/bigfilter/?city=${city}&comm=${commitment}&comp=${company}&country=${country}&desc=${description}&job=${title}&src=lever`);
+    setUrl(`http://127.0.0.1:8090/api/bigfilter/?city=${city}&comm=${commitment}&comp=${company}&country=${country}&desc=${description}&job=${title}&src=lever`);
     //reset data
     setCity("");
     setCommitment("");
@@ -145,6 +168,7 @@ const Tables = () => {
       deletePostFromShoppingCart(post);
     }
     setCart(positionsToApply);
+
   };
 
 
@@ -177,6 +201,10 @@ const Tables = () => {
   return (
     <>
       <div className="content">
+        {applySuccess?
+        <Alert color="success">
+          You have successfully applied to car{cartSize} positions
+        </Alert> :null}
         <Row>
           <Col md="12">
             <Card>
@@ -216,7 +244,7 @@ const Tables = () => {
                   />
                 </Table>
                 <TablePagination
-                  rowsPerPageOptions={[3, 10, 15, { label: 'All', value: -1 }]}
+                  rowsPerPageOptions={[10, 25, { label: 'All', value: -1 }]}
                   colSpan={3}
                   count={result.length}
                   rowsPerPage={rowsPerPage}

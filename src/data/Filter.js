@@ -1,12 +1,10 @@
 
 import React, { useEffect, useState } from "react";
-import { Dialog, DialogContent, DialogTitle, Divider } from '@material-ui/core';
+import { Dialog, DialogContent, DialogTitle} from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 
 // reactstrap components
 import {
-  Modal,
-  Dropdown,
   Button,
   Card,
   CardHeader,
@@ -29,16 +27,6 @@ const useStyles = makeStyles((theme) => ({
       width: 600,
       marginLeft: 'auto',
       marginRight: 'auto',
-    },
-  },
-  paper: {
-    marginTop: theme.spacing(3),
-    marginBottom: theme.spacing(3),
-    padding: theme.spacing(2),
-    [theme.breakpoints.up(600 + theme.spacing(3) * 2)]: {
-      marginTop: theme.spacing(6),
-      marginBottom: theme.spacing(6),
-      padding: theme.spacing(3),
     },
   },
   dialog: {
@@ -68,13 +56,13 @@ const Filter = ({ modalShow, setFilterCity, setFilterCommitment, setFilterCompan
                   <Card>
                     <DialogTitle>
                       <CardHeader>
-                        <h5 className="title">Filter Positions</h5>
+                        <h5 className="Analyst">Filter Positions</h5>
                       </CardHeader>
                     </DialogTitle>
                     <CardBody>
                       <Form>
                         <Row>
-                          <Col className="pr-md-1" md="5">
+                          <Col className="pr-md-1" md="6">
                             <FormGroup>
                               <label>Company</label>
                               <Input
@@ -85,7 +73,7 @@ const Filter = ({ modalShow, setFilterCity, setFilterCommitment, setFilterCompan
                               />
                             </FormGroup>
                           </Col>
-                          <Col className="px-md-1" md="3">
+                          <Col className="px-md-1" md="6">
                             <FormGroup>
                               <label>Title</label>
                               <Input

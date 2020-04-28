@@ -18,6 +18,7 @@
 import Dashboard from "views/Dashboard.js";
 import TableList from "views/TableList.js";
 import UserProfile from "views/UserProfile.js";
+import Login from "views/Login";
 
 var routes = [
   {
@@ -40,6 +41,6 @@ var routes = [
     icon: "tim-icons icon-puzzle-10",
     component: TableList,
     layout: "/admin"
-  }
+  },
 ];
 export default routes;

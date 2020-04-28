@@ -33,9 +33,10 @@ import {
   Col
 } from "reactstrap";
 
+import { Badge } from '@material-ui/core/';
 
 const UserProfile = () => {
-  const [url, setUrl] = useState('http://127.0.0.1:8080/user?userId=5ea01887f4d18ff91ebdb930');
+  const [url, setUrl] = useState('http://127.0.0.1:8080/user?userId=');
   const [uploadedFileName, setUploadFileName] = useState('');
   const [file, setFile] = useState([]);
   const [username, setUsername] = useState('');
@@ -46,16 +47,20 @@ const UserProfile = () => {
   const [city, setCity] = useState('');
   const [country, setCountry] = useState('');
   const [postalCode, setPostalCode] = useState('');
+  const [phoneNumber, setPhoneNumber] = useState('');
   const [currentJobTitle, setCurrentJobTitle] = useState('');
   const [currentCompany, setCurrentCompany] = useState('');
   const [currentJobDescription, setCurrentJobDescription] = useState('');
   const [githubUrl, setGithubUrl] = useState('');
   const [linkedinUrl, setLinkedinUrl] = useState('');
-
+  const [userId, setUserId] = useState('P8GhoDN052d2fIqpNGPAZ9nVDeu1');
+  const [showCheckMark, setShowCheckMark] = useState(false);
+  const [isLegal, setIsLegal] = useState(true);
+  const [visa, setVisa] = useState('');
 
   useEffect(() => {
     const fetchPosts = async () => {
-      const response = await axios.get(url);
+      const response = await axios.get(`http://127.0.0.1:8080/user?userId=${userId}`);
       setFirstName(response.data.firstName);
       setUploadFileName(response.data.fileName);
       setLastName(response.data.lastName);
@@ -69,14 +74,20 @@ const UserProfile = () => {
       setCurrentJobTitle(response.data.jobTitle);
       setCurrentJobDescription(response.data.jobDescription);
       setEmail(response.data.email);
+      setPhoneNumber(response.data.phoneNumber);
+      setIsLegal(response.data.isLegal);
+      setVisa(response.data.visa);
     };
     fetchPosts();
   }, [url]);
 
   const handleUploadFile = (event) => {
-    setFile(event.target.files[0]);
-    setUploadFileName(event.target.files[0].name);
+    if (event.target.files && event.target.files[0]) {
+      setFile(event.target.files[0]);
+      setUploadFileName(event.target.files[0].name);
+    }
   };
+
 
   const handleChange = (prop) => (event) => {
     if (prop === 'linkedinUrl') setLinkedinUrl(event.target.value);
@@ -91,6 +102,9 @@ const UserProfile = () => {
     if (prop === 'jobTitle') setCurrentJobTitle(event.target.value);
     if (prop === 'jobDescription') setCurrentJobDescription(event.target.value);
     if (prop === 'email') setEmail(event.target.value);
+    if (prop === 'phone') setPhoneNumber(event.target.value);
+    if (prop === 'isLegal') setIsLegal(event.target.value);
+    if (prop === 'visa') setVisa(event.target.value);
   };
 
   const handleSaveButton = (event) => {
@@ -98,7 +112,7 @@ const UserProfile = () => {
     event.preventDefault();
     axios({
       method: 'put',     //put
-      url: "http://127.0.0.1:8080/update/user?userId=5ea01887f4d18ff91ebdb930",
+      url: `http://127.0.0.1:8080/update/user?userId=${userId}`,
       // headers: {'Authorization': 'Bearer'}, 
       data: {
         firstName: firstName, // This is the body part
@@ -113,10 +127,13 @@ const UserProfile = () => {
         company: currentCompany,
         jobTitle: currentJobTitle,
         jobDescription: currentJobDescription,
-        email: email
+        email: email,
+        phoneNumber: phoneNumber,
+        isLegal: isLegal,
+        visa: visa
       }
     }).then(response => {
-
+      if (response.status === 200) setShowCheckMark(true);
     }).catch(error => {
       console.log(error);
     });
@@ -132,7 +149,7 @@ const UserProfile = () => {
                 <h5 className="title">Edit Profile</h5>
               </CardHeader>
               <CardBody>
-                <Form>
+                <Form onSubmit={handleSaveButton}>
                   <Row>
                     <Col className="pr-md-1" md="5">
                       <label>Upload Resume</label>
@@ -165,7 +182,9 @@ const UserProfile = () => {
                           onChange={handleChange('email')}
                           defaultValue={email}
                           placeholder="Email"
-                          type="email" />
+                          type="email"
+                          required
+                        />
                       </FormGroup>
                     </Col>
                   </Row>
@@ -182,7 +201,7 @@ const UserProfile = () => {
                       </FormGroup>
                     </Col>
                     <Col className="pl-md-1" md="6">
-                      <FormGroup>
+                      <FormGroup required>
                         <label>Last Name</label>
                         <Input
                           onChange={handleChange('lastName')}
@@ -237,6 +256,47 @@ const UserProfile = () => {
                           defaultValue={postalCode}
                           placeholder="ZIP Code"
                           type="number" />
+                      </FormGroup>
+                    </Col>
+                  </Row>
+                  <Row>
+                    <Col className="pr-md-1" md="4">
+                      <FormGroup>
+                        <label>Phone Number</label>
+                        <Input
+                          onChange={handleChange('phone')}
+                          defaultValue={phoneNumber}
+                          placeholder="e.g: 3033333333"
+                          type="text"
+                        />
+                      </FormGroup>
+                    </Col>
+                    <Col className="px-md-1" md="4">
+                      <FormGroup>
+                      <label>Are you legally allowed to work in the U.S</label>
+                        <Input
+                          onChange={handleChange('isLegal')}
+                          value={isLegal}
+                          type="select">
+                          <option value = {"yes"} onChange={handleChange('visa')}> Yes</option>
+                          <option value = {"no"} onChange={handleChange('visa')}>No</option>
+                        </Input>
+                      </FormGroup>
+                    </Col>
+                    <Col className="pl-md-1" md="4">
+                      <FormGroup>
+                      <label>Visa Status</label>
+                        <Input
+                          onChange={handleChange('visa')}
+                          value={visa}
+                          type="select">
+                          <option value = {"US CITIZEN"} onChange={handleChange('visa')}>U.S citizen</option>
+                          <option value = {"GREENCARD"} onChange={handleChange('visa')}>Permanent Resident (GREENCARD)</option>
+                          <option value = {"F1OPT"} onChange={handleChange('visa')}>F-1 Student OPT</option>
+                          <option value = {"F1CPT"} onChange={handleChange('visa')}>F-1 Student CPT</option>
+                          <option value = {"H1B"} onChange={handleChange('visa')}>H1B</option>
+                          <option value = {"other"} onChange={handleChange('visa')}>Other</option>
+                        </Input>
                       </FormGroup>
                     </Col>
                   </Row>
@@ -300,12 +360,17 @@ const UserProfile = () => {
                       </FormGroup>
                     </Col>
                   </Row>
+                  <Button className="btn-fill" color="primary" type="submit">
+                    Save
+                  </Button>
                 </Form>
               </CardBody>
               <CardFooter>
-                <Button className="btn-fill" color="primary" type="submit" onClick={handleSaveButton}>
-                  Save
-                  </Button>
+                {showCheckMark ?
+                  <p className="description">
+                    Profile Updated&nbsp;<i className="tim-icons icon-check-2" />
+                  </p>
+                  : null}
               </CardFooter>
             </Card>
           </Col>
@@ -330,7 +395,7 @@ const UserProfile = () => {
                 </div>
                 <div className="card-description">
                   I am looking for an internship for Fall 2020/2021 as a software developer.
-                  </div>
+                </div>
               </CardBody>
               <CardFooter>
                 <div className="button-container">
