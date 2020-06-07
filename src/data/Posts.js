@@ -10,10 +10,14 @@ import {
 
 import FixedPlugin from "../components/FixedPlugin/FixedPlugin";
 import TextTruncate from 'react-text-truncate';
+import DetailsForm from "../data/DetailsForm";
 
 
 const Posts = ({ result, loading, resetCart, setResetCart, cartSize, checkAll, handleCheckMark, cartContent, deletePostFromShoppingCart, rowsPerPage, page }) => {
     let preSet = false;
+    const [showDetailsPopUp, setShowDetailsPopUp] = useState(false);
+    const [postToShow, setPostToShow] = useState([]);
+
     if (loading) {
         return (
             <tbody>
@@ -27,15 +31,28 @@ const Posts = ({ result, loading, resetCart, setResetCart, cartSize, checkAll, h
             </tbody>
         )
     }
+    
+    const showDetails = (post) => {
+        setShowDetailsPopUp(true);
+        setPostToShow(post);
+    };
+
+    const hideDetails = () => {
+        setShowDetailsPopUp(false);
+        setPostToShow([]);
+    };
 
     return (
         <>
             <div className="fixed-plugin">
                 <FixedPlugin cartSize={cartSize} cartContent={cartContent} removePostFromCart={deletePostFromShoppingCart} />
             </div>
+            {showDetails? 
+            <DetailsForm modalShow = {showDetailsPopUp} post = {postToShow} hideDetails = {hideDetails} />
+            :null}
             <thead className="text-primary">
                 <tr>
-                    <th><FormGroup check>
+                    {/* <th><FormGroup check>
                         <Label check>
                             <Input type="checkbox"
                                 defaultChecked={false}
@@ -46,7 +63,8 @@ const Posts = ({ result, loading, resetCart, setResetCart, cartSize, checkAll, h
                             </span>
                         </Label>
                     </FormGroup>
-                    </th>
+                    </th> */}
+                    <th></th>
                     <th>title</th>
                     <th>company</th>
                     <th>location</th>
@@ -84,7 +102,7 @@ const Posts = ({ result, loading, resetCart, setResetCart, cartSize, checkAll, h
                                 element="span"
                                 truncateText="…"
                                 text={post.descriptionOfPosition}
-                                textTruncateChild={<a href="#">more</a>}
+                                textTruncateChild={<a href="#" onClick={(event) => showDetails(post)}>more</a>}
                             /></td>
                         <td className="text-center">{post.team}</td>
                     </tr>

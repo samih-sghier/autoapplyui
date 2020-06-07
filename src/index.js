@@ -12,14 +12,24 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import App from "App";
+import store, { persistor } from 'redux/store/index';
+import { Provider } from 'react-redux';
+import { Router } from 'react-router-dom';
+import { PersistGate } from 'redux-persist/integration/react';
 
 import "assets/scss/black-dashboard-react.scss";
 import "assets/demo/demo.css";
 import "assets/css/nucleo-icons.css";
+import { createBrowserHistory } from "history";
+const hist = createBrowserHistory();
 
 
 ReactDOM.render(
-<App/>
+  <Provider store={store}>
+    <PersistGate loading={null} persistor={persistor}>
+      <App />
+    </PersistGate>
+  </Provider>
   ,
   document.getElementById("root")
 );

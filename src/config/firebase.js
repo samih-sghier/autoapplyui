@@ -13,7 +13,6 @@ import "firebase/firestore";
     appId: "1:602416786778:web:67f53d7d46a581bf355763",
     measurementId: "G-B6Y5FZEH57"
   };
-
   firebase.initializeApp(firebaseConfig)
   export const auth = firebase.auth()
   export const firestore = firebase.firestore()
@@ -22,3 +21,4 @@ import "firebase/firestore";
   export function signInWithGoogle() {
       auth.signInWithPopup(provider)
   }
+  export  const signOut = auth.signOut()

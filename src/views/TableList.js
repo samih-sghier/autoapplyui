@@ -34,13 +34,14 @@ import Posts from "../data/Posts";
 import Filter from "../data/Filter";
 import TablePagination from '@material-ui/core/TablePagination';
 import PaginationActions from "../components/Pagination/PaginationActions";
-
+import { selectFirebaseToken } from 'redux/reducers';
+import { useSelector, useDispatch } from "react-redux";
 
 let positionsToApply = [];
 
 const Tables = () => {
-
-  const [url, setUrl] = useState('http://127.0.0.1:8090/api/indexed/?endIndex=2000&src=lever&startIndex=0');
+  const userId = useSelector(selectFirebaseToken);
+  const [url, setUrl] = useState(`http://automicroservice-278614.uc.r.appspot.com/api/all/positions/user?src=lever&userId=${userId}`);
   const [loading, setLoading] = useState(true);
   const [result, setResult] = useState([]);
   const [modalShow, setModalShow] = useState(false);
@@ -52,10 +53,11 @@ const Tables = () => {
   const [description, setDescription] = useState("");
   const [cartContent, setCartContent] = useState([]);
   const [cartSize, setCartSize] = useState(0);
-  const [userId, setUserId] = useState('P8GhoDN052d2fIqpNGPAZ9nVDeu1');
   const [resetCart, setResetCart] = useState(false);
   const [checkAllPositions, setCheckAllPositioons] = useState(false);
   const [applySuccess, setApplySuccess] = useState(false);
+  const [applyFail, setApplyFail] = useState(false);
+  const [applying, setApplying] = useState(false);
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
 
@@ -67,23 +69,32 @@ const Tables = () => {
       });
       setResult(response.data);
       setLoading(false);
+      setApplySuccess(false);
     };
     fetchPosts();
-  }, [url]);
+  }, [url, applySuccess]);
 
   const handleApply = (event) => {
     //  setUrl('http://127.0.0.1:8090/api/indexed/?endIndex=1000&src=lever&startIndex=1');
     event.preventDefault();
+    if (cartSize > 0) {
+    setApplying(true);
     let temp = [];
     cartContent.map(positions => {
       var innerData = [];
       innerData.push(positions.text);
       innerData.push(positions.applyUrl);
+      innerData.push(positions.company);
+      innerData.push(positions.commitment);
+      innerData.push(positions.location);
+      innerData.push(positions.team);
+      innerData.push(positions.id);
       temp.push(positions);
     });
+    
     axios({
       method: 'post',     //post
-      url: `http://127.0.0.1:8080/apply/user`,
+      url: `https://userservice20.herokuapp.com/apply/user`,
       // headers: {'Authorization': 'Bearer'}, 
       data: {
         userId: userId,
@@ -91,12 +102,24 @@ const Tables = () => {
       }
     }).then(response => {
       if (response.status === 200) {
+        setApplying(false);
         setApplySuccess(true);
-        setResetCart(true);
-      }
+        setCart([]);
+        positionsToApply = [];
+        axios({
+          method: 'post',     //post
+          url: `https://userservice20.herokuapp.com/submited/user`,
+          // headers: {'Authorization': 'Bearer'}, 
+          data: { 
+            userId: userId,
+            positions: temp,
+          }
+        })
+      } 
     }).catch(error => {
       console.log(error);
     });
+  }
   };
 
   const setFilterCity = (theCity) => {
@@ -124,7 +147,7 @@ const Tables = () => {
   }
 
   const handleSubmitFilter = () => {
-    setUrl(`http://127.0.0.1:8090/api/bigfilter/?city=${city}&comm=${commitment}&comp=${company}&country=${country}&desc=${description}&job=${title}&src=lever`);
+    setUrl(`http://automicroservice-278614.uc.r.appspot.com/api/bigfilter/?city=${city}&comm=${commitment}&comp=${company}&country=${country}&desc=${description}&job=${title}&src=lever`);
     //reset data
     setCity("");
     setCommitment("");
@@ -168,7 +191,6 @@ const Tables = () => {
       deletePostFromShoppingCart(post);
     }
     setCart(positionsToApply);
-
   };
 
 
@@ -201,9 +223,17 @@ const Tables = () => {
   return (
     <>
       <div className="content">
+       {applying && cartSize > 0?
+        <Alert color="success">
+          Applying in progress, it might take a few minutes (you may navigate away) ... 
+        </Alert>:null}
         {applySuccess?
         <Alert color="success">
-          You have successfully applied to car{cartSize} positions
+          You have successfully applied to selected positions
+        </Alert> :null}
+        {applyFail?
+        <Alert color= "danger">
+          Some of the positions you have applied to are no longer available
         </Alert> :null}
         <Row>
           <Col md="12">

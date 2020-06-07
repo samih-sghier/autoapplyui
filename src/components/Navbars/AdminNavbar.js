@@ -18,6 +18,7 @@
 import React from "react";
 // nodejs library that concatenates classes
 import classNames from "classnames";
+import { BrowserRouter as Router, Route,Switch, Redirect, Link} from 'react-router-dom'
 
 // reactstrap components
 import {
@@ -34,10 +35,18 @@ import {
   NavLink,
   Nav,
   Container,
-  Modal
+  Modal,
 } from "reactstrap";
+import { logout } from "redux/actions/auth";
+import UserProfile from "views/UserProfile";
+import { signOut } from 'config/firebase';
+import { selectFirebaseToken } from 'redux/reducers';
+import { useSelector, useDispatch } from "react-redux";
+import Logout from "views/Logout";
+
 
 class AdminNavbar extends React.Component {
+
   constructor(props) {
     super(props);
     this.state = {
@@ -46,6 +55,10 @@ class AdminNavbar extends React.Component {
       color: "navbar-transparent"
     };
   }
+
+  redirectToProfile = () => {
+    this.props.history.push('/admin/user-profile');
+  } 
   componentDidMount() {
     window.addEventListener("resize", this.updateColor);
   }
@@ -143,7 +156,7 @@ class AdminNavbar extends React.Component {
                     <span className="d-lg-none d-md-block">Search</span>
                   </Button>
                 </InputGroup>
-                <UncontrolledDropdown nav>
+                {/* <UncontrolledDropdown nav>
                   <DropdownToggle
                     caret
                     color="default"
@@ -161,7 +174,7 @@ class AdminNavbar extends React.Component {
                       </DropdownItem>
                     </NavLink>
                     <NavLink tag="li">
-                      <DropdownItem className="nav-item">
+                      <DropdownItem className="nav-item" >
                         You have 5 more tasks
                       </DropdownItem>
                     </NavLink>
@@ -181,7 +194,7 @@ class AdminNavbar extends React.Component {
                       </DropdownItem>
                     </NavLink>
                   </DropdownMenu>
-                </UncontrolledDropdown>
+                </UncontrolledDropdown> */}
                 <UncontrolledDropdown nav>
                   <DropdownToggle
                     caret
@@ -194,19 +207,14 @@ class AdminNavbar extends React.Component {
                       <img alt="..." src={require("assets/img/anime3.png")} />
                     </div>
                     <b className="caret d-none d-lg-block d-xl-block" />
-                    <p className="d-lg-none">Log out</p>
+                    <p className="d-lg-none">Account Details</p>
                   </DropdownToggle>
                   <DropdownMenu className="dropdown-navbar" right tag="ul">
                     <NavLink tag="li">
-                      <DropdownItem className="nav-item">Profile</DropdownItem>
+                      <DropdownItem className="nav-item" onClick = {this.redirectToProfile}>Profile</DropdownItem>
                     </NavLink>
-                    <NavLink tag="li">
-                      <DropdownItem className="nav-item">Settings</DropdownItem>
-                    </NavLink>
-                    <DropdownItem divider tag="li" />
-                    <NavLink tag="li">
-                      <DropdownItem className="nav-item">Log out</DropdownItem>
-                    </NavLink>
+                    <Logout></Logout>
+
                   </DropdownMenu>
                 </UncontrolledDropdown>
                 <li className="separator d-lg-none" />

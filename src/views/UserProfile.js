@@ -16,7 +16,7 @@
 
 */
 import React, { useEffect, useState } from "react";
-import axios from 'axios';
+import axios, { post } from 'axios';
 
 // reactstrap components
 import {
@@ -33,10 +33,11 @@ import {
   Col
 } from "reactstrap";
 
-import { Badge } from '@material-ui/core/';
+import { selectFirebaseToken } from 'redux/reducers';
+import { useSelector, useDispatch } from "react-redux";
 
 const UserProfile = () => {
-  const [url, setUrl] = useState('http://127.0.0.1:8080/user?userId=');
+  const [url, setUrl] = useState('https://userservice20.herokuapp.com/user?userId=');
   const [uploadedFileName, setUploadFileName] = useState('');
   const [file, setFile] = useState([]);
   const [username, setUsername] = useState('');
@@ -53,14 +54,14 @@ const UserProfile = () => {
   const [currentJobDescription, setCurrentJobDescription] = useState('');
   const [githubUrl, setGithubUrl] = useState('');
   const [linkedinUrl, setLinkedinUrl] = useState('');
-  const [userId, setUserId] = useState('P8GhoDN052d2fIqpNGPAZ9nVDeu1');
+  const userId = useSelector(selectFirebaseToken);
   const [showCheckMark, setShowCheckMark] = useState(false);
   const [isLegal, setIsLegal] = useState(true);
   const [visa, setVisa] = useState('');
 
   useEffect(() => {
     const fetchPosts = async () => {
-      const response = await axios.get(`http://127.0.0.1:8080/user?userId=${userId}`);
+      const response = await axios.get(`https://userservice20.herokuapp.com/user?userId=${userId}`);
       setFirstName(response.data.firstName);
       setUploadFileName(response.data.fileName);
       setLastName(response.data.lastName);
@@ -112,7 +113,7 @@ const UserProfile = () => {
     event.preventDefault();
     axios({
       method: 'put',     //put
-      url: `http://127.0.0.1:8080/update/user?userId=${userId}`,
+      url: `https://userservice20.herokuapp.com/update/user?userId=${userId}`,
       // headers: {'Authorization': 'Bearer'}, 
       data: {
         firstName: firstName, // This is the body part
@@ -137,6 +138,16 @@ const UserProfile = () => {
     }).catch(error => {
       console.log(error);
     });
+    //posts files
+    const formData = new FormData();
+    formData.append('userId', userId);
+    formData.append('file', file);
+    const config = {
+        headers: {
+            'content-type': 'multipart/form-data'
+        }
+    }
+    post('https://userservice20.herokuapp.com/post/resume', formData, config);
   }
 
   return (
@@ -197,6 +208,7 @@ const UserProfile = () => {
                           defaultValue={firstName}
                           placeholder="Name"
                           type="text"
+                          required
                         />
                       </FormGroup>
                     </Col>
@@ -208,6 +220,7 @@ const UserProfile = () => {
                           defaultValue={lastName}
                           placeholder="Last Name"
                           type="text"
+                          required
                         />
                       </FormGroup>
                     </Col>
@@ -221,6 +234,7 @@ const UserProfile = () => {
                           defaultValue={address}
                           placeholder="Home Address"
                           type="text"
+                          required
                         />
                       </FormGroup>
                     </Col>
@@ -245,6 +259,7 @@ const UserProfile = () => {
                           defaultValue={country}
                           placeholder="Country"
                           type="text"
+                          required
                         />
                       </FormGroup>
                     </Col>
@@ -266,36 +281,38 @@ const UserProfile = () => {
                         <Input
                           onChange={handleChange('phone')}
                           defaultValue={phoneNumber}
-                          placeholder="e.g: 3033333333"
+                          placeholder="e.g: 3332224444"
                           type="text"
                         />
                       </FormGroup>
                     </Col>
                     <Col className="px-md-1" md="4">
                       <FormGroup>
-                      <label>Are you legally allowed to work in the U.S</label>
+                        <label>Are you legally allowed to work in the U.S</label>
                         <Input
                           onChange={handleChange('isLegal')}
                           value={isLegal}
                           type="select">
-                          <option value = {"yes"} onChange={handleChange('visa')}> Yes</option>
-                          <option value = {"no"} onChange={handleChange('visa')}>No</option>
+                          <option></option>
+                          <option value={"yes"} onChange={handleChange('visa')}> Yes</option>
+                          <option value={"no"} onChange={handleChange('visa')}>No</option>
                         </Input>
                       </FormGroup>
                     </Col>
                     <Col className="pl-md-1" md="4">
                       <FormGroup>
-                      <label>Visa Status</label>
+                        <label>Visa Status</label>
                         <Input
                           onChange={handleChange('visa')}
                           value={visa}
                           type="select">
-                          <option value = {"US CITIZEN"} onChange={handleChange('visa')}>U.S citizen</option>
-                          <option value = {"GREENCARD"} onChange={handleChange('visa')}>Permanent Resident (GREENCARD)</option>
-                          <option value = {"F1OPT"} onChange={handleChange('visa')}>F-1 Student OPT</option>
-                          <option value = {"F1CPT"} onChange={handleChange('visa')}>F-1 Student CPT</option>
-                          <option value = {"H1B"} onChange={handleChange('visa')}>H1B</option>
-                          <option value = {"other"} onChange={handleChange('visa')}>Other</option>
+                          <option></option>
+                          <option value={"US CITIZEN"} onChange={handleChange('visa')}>U.S citizen</option>
+                          <option value={"GREENCARD"} onChange={handleChange('visa')}>Permanent Resident (GREENCARD)</option>
+                          <option value={"F1OPT"} onChange={handleChange('visa')}>F-1 Student OPT</option>
+                          <option value={"F1CPT"} onChange={handleChange('visa')}>F-1 Student CPT</option>
+                          <option value={"H1B"} onChange={handleChange('visa')}>H1B</option>
+                          <option value={"other"} onChange={handleChange('visa')}>Other</option>
                         </Input>
                       </FormGroup>
                     </Col>
@@ -392,10 +409,9 @@ const UserProfile = () => {
                     <h5 className="title">{firstName}&nbsp;{lastName}</h5>
                   </a>
                   <p className="description">{currentJobTitle}</p>
+                  {/* <p className="card-description">{currentCompany}</div> */}
                 </div>
-                <div className="card-description">
-                  I am looking for an internship for Fall 2020/2021 as a software developer.
-                </div>
+                {/* <div className="card-description pull-center"> */}
               </CardBody>
               <CardFooter>
                 <div className="button-container">

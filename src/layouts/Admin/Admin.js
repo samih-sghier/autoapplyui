@@ -27,7 +27,7 @@ import Sidebar from "components/Sidebar/Sidebar.js";
 
 import routes from "routes.js";
 
-import logo from "assets/img/react-logo.png";
+import logo from "assets/img/butterfly.png";
 
 var ps;
 
@@ -120,7 +120,7 @@ class Admin extends React.Component {
             routes={routes}
             bgColor={this.state.backgroundColor}
             logo={{
-              text: "React Project",
+              text: "Bowtie",
               imgSrc: logo
             }}
             toggleSidebar={this.toggleSidebar}

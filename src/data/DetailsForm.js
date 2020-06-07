@@ -12,7 +12,7 @@ import {
   CardFooter,
   FormGroup,
   Form,
-  Input,
+  Labe,
   Row,
   Col
 } from "reactstrap";
@@ -35,10 +35,8 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-const Filter = ({ modalShow, setFilterCity, setFilterCommitment, setFilterCompany,
-  setFilterTitle, setFilterCountry, setFilterDescription, handleSubmit, hideModal }) => {
+const DetailsForm = ({ modalShow, hideDetails, post}) => {
   const classes = useStyles();
-
   return (
     <>
       <div>
@@ -56,7 +54,7 @@ const Filter = ({ modalShow, setFilterCity, setFilterCommitment, setFilterCompan
                   <Card>
                     <DialogTitle>
                       <CardHeader>
-                        <label><b>Filter Positions - search is not always optimal, try different keyword combinations for better result</b></label>
+                        <h5><b>Position Details</b></h5>
                       </CardHeader>
                     </DialogTitle>
                     <CardBody>
@@ -64,75 +62,57 @@ const Filter = ({ modalShow, setFilterCity, setFilterCommitment, setFilterCompan
                         <Row>
                           <Col className="pr-md-1" md="6">
                             <FormGroup>
-                              <label>Company</label>
-                              <Input
-                                // disabled
-                                placeholder="Company"
-                                type="text"
-                                onChange={e => setFilterCompany(e.target.value)}
-                              />
+                              <label><b>Company</b></label>
+                              <br></br>
+                              <p>{post.company}</p>
                             </FormGroup>
                           </Col>
                           <Col className="px-md-1" md="6">
                             <FormGroup>
-                              <label>Title</label>
-                              <Input
-                                placeholder="title"
-                                type="text"
-                                onChange={e => setFilterTitle(e.target.value)}
-                              />
+                              <label><b>Title</b></label>
+                              <br></br>
+                              <p>{post.text}</p>
                             </FormGroup>
                           </Col>
                         </Row>
                         <Row>
                           <Col className="pr-md-1" md="4">
                             <FormGroup>
-                              <label>City</label>
-                              <Input
-                                placeholder="City"
-                                type="text"
-                                onChange={e => setFilterCity(e.target.value)}
-                              />
+                              <label><b>Team</b></label>
+                              <br></br>
+                              <p>{post.team}</p>
                             </FormGroup>
                           </Col>
                           <Col className="px-md-1" md="4">
                             <FormGroup>
-                              <label>Country</label>
-                              <Input
-                                placeholder="Country"
-                                type="text"
-                                onChange={e => setFilterCountry(e.target.value)}
-                              />
+                              <label><b>Location</b></label>
+                              <br></br>
+                              <p>{post.location}</p>
                             </FormGroup>
                           </Col>
                           <Col className="pl-md-1" md="4">
                             <FormGroup>
-                              <label>Commitment</label>
-                              <Input placeholder="Full-Time" type="text" onChange={e => setFilterCommitment(e.target.value)} />
+                              <label><b>Commitment</b></label>
+                              <br></br>
+                              <p>{post.commitment}</p>
                             </FormGroup>
                           </Col>
                         </Row>
                         <Row>
-                          <Col md="8">
+                        <Col className="pr-md-1" md="12">
                             <FormGroup>
-                              <label>Job Description Key Words</label>
-                              <Input
-                                cols="80"
-                                placeholder="Here can be your description"
-                                rows="4"
-                                type="textarea"
-                                onChange={e => setFilterDescription(e.target.value)}
-                              />
+                              <label><b>Description</b></label>
+                              <br></br>
+                              <p>{post.descriptionOfPosition}</p>
                             </FormGroup>
                           </Col>
                         </Row>
                       </Form>
                     </CardBody>
                     <CardFooter>
-                      <Button className="btn-fill" color="primary" type="submit" onClick={handleSubmit}>
-                        Search
+                    <Button className="btn-fill" color="primary" onClick={hideDetails}>
+                        Close
                   </Button>
-                      <Button type="button" className="btn btn-default" onClick={hideModal}>Close</Button>
                     </CardFooter>
                   </Card>
                 </Col>
@@ -145,4 +125,4 @@ const Filter = ({ modalShow, setFilterCity, setFilterCommitment, setFilterCompan
   );
 }
 
-export default Filter;
+export default DetailsForm;
